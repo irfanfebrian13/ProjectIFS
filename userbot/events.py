@@ -15,7 +15,7 @@ from traceback import format_exc
 
 from telethon import events
 
-from userbot import bot, BOTLOG_CHATID, LOGSPAMMER
+from userbot import bot, BOTLOG, BOTLOG_CHATID, LOGSPAMMER
 
 
 def register(**args):
@@ -98,7 +98,7 @@ def register(**args):
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**USERBOT ERROR REPORT**\n"
-                    link = "Support chat PM: @adekmaulana"
+                    link = "Support chat PM: @ONLYXBEAN"
                     text += "If you want to, you can report it"
                     text += f"- just forward this message to {link}.\n"
                     text += "Nothing is logged except the fact of error and date\n"
@@ -139,10 +139,17 @@ def register(**args):
                     file.write(ftext)
                     file.close()
 
-                    if LOGSPAMMER:
-                        await check.client.respond(
-                            "`Sorry, my userbot has crashed."
-                            "\nThe error logs are stored in the userbot's log chat.`"
+                    if BOTLOG:
+                        await check.client.send_file(
+                            BOTLOG_CHATID,
+                            "error.log",
+                            caption=text,
+                        )
+                    else:
+                        await check.client.send_file(
+                            check.chat_id,
+                            "error.log",
+                            caption=text,
                         )
 
                         await check.client.send_file(send_to,
