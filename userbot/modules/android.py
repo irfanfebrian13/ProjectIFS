@@ -1,11 +1,12 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module containing commands related to android"""
 
 import asyncio
+import json
 import re
 import os
 import time
@@ -51,27 +52,31 @@ async def magisk(request):
 async def device_info(request):
     """ get android device basic info from its codename """
     textx = await request.get_reply_message()
-    device = request.pattern_match.group(1)
-    if device:
+    codename = request.pattern_match.group(1)
+    if codename:
         pass
     elif textx:
-        device = textx.text
+        codename = textx.text
     else:
-        return await request.edit("`Usage: .device <codename> / <model>`")
-    found = [
-        i for i in get(DEVICES_DATA).json()
-        if device in (i['device'], i['model'])
-    ]
-    if found:
-        reply = f'Search results for {device}:\n\n'
-        for item in found:
-            brand = item['brand']
-            name = item['name']
-            codename = device
-            model = item['model']
-            reply += f'{brand} {name}\n' \
-                f'**Codename**: `{codename}`\n' \
-                f'**Model**: {model}\n\n'
+        await request.edit("`Usage: .device <codename> / <model>`")
+        return
+    data = json.loads(
+        get(
+            "https://raw.githubusercontent.com/androidtrackers/"
+            "certified-android-devices/master/by_device.json"
+        ).text
+    )
+    results = data.get(codename)
+    if results:
+        reply = f"**Search results for {codename}**:\n\n"
+        for item in results:
+            reply += (
+                f"**Brand**: {item['brand']}\n"
+                f"**Name**: {item['name']}\n"
+                f"**Model**: {item['model']}\n\n"
+            )
+    else:
+        reply = f"`Couldn't find info about {codename}!`\n"
     await request.edit(reply)
 
 
@@ -81,29 +86,40 @@ async def codename_info(request):
     textx = await request.get_reply_message()
     brand = request.pattern_match.group(1).lower()
     device = request.pattern_match.group(2).lower()
+
     if brand and device:
         pass
     elif textx:
         brand = textx.text.split(' ')[0]
         device = ' '.join(textx.text.split(' ')[1:])
     else:
-        return await request.edit("`Usage: .codename <brand> <device>`")
-    found = [
-        i for i in get(DEVICES_DATA).json()
-        if i["brand"].lower() == brand and device in i["name"].lower()
+        await request.edit("`Usage: .codename <brand> <device>`")
+        return
+
+    data = json.loads(
+        get(
+            "https://raw.githubusercontent.com/androidtrackers/"
+            "certified-android-devices/master/by_brand.json"
+        ).text
+    )
+    devices_lower = {k.lower(): v for k, v in data.items()
+                     }  # Lower brand names in JSON
+    devices = devices_lower.get(brand)
+    results = [
+        i
+        for i in devices
+        if i["name"].lower() == device.lower() or i["model"].lower() == device.lower()
     ]
-    if len(found) > 8:
-        found = found[:8]
-    if found:
-        reply = f'Search results for {brand.capitalize()} {device.capitalize()}:\n\n'
-        for item in found:
-            brand = item['brand']
-            name = item['name']
-            codename = item['device']
-            model = item['model']
-            reply += f'{brand} {name}\n' \
-                f'**Codename**: `{codename}`\n' \
-                f'**Model**: {model}\n\n'
+    if results:
+        reply = f"**Search results for {brand} {device}**:\n\n"
+        if len(results) > 8:
+            results = results[:8]
+        for item in results:
+            reply += (
+                f"**Device**: {item['device']}\n"
+                f"**Name**: {item['name']}\n"
+                f"**Model**: {item['model']}\n\n"
+            )
     else:
         reply = f"`Couldn't find {device} codename!`\n"
     await request.edit(reply)
