@@ -164,7 +164,7 @@
     },
     "BITLY_TOKEN": {
       "description": "Your Bit.ly API key, get it from 'https://bitly.com/a/sign_up'",
-      "value": "",
+      "value": ""
       "required": false
     },
     "LOGSPAMMER": {

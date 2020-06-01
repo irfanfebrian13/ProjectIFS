@@ -58,3 +58,4 @@ youtube_search
 pyaztro
 validators
 justwatch
+bitlyshortener

@@ -2,6 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/irfanfebrian13/ProjectIFS/actions?query=PEP8"> <img src="https://github.com/irfanfebrian13/ProjectIFS/workflows/PEP8/badge.svg?branch=master" alt="PEP8" /></a>
+    <a href="https://github.styleci.io/repos/276585239?branch=master><img src="https://github.styleci.io/repos/276585239/shield?branch=master" alt="StyleCI"></a><br>
     <a href="https://github.com/irfanfebrian13/ProjectIFS"> <img src="https://img.shields.io/github/repo-size/irfanfebrian13/ProjectIFS?logo=github&style=for-the-badge" /></a>
     <a href="https://github.com/irfanfebrian13/ProjectIFS/graphs/contributors"> <img src="https://img.shields.io/github/contributors-anon/irfanfebrian13/ProjectIFS?color=blue&label=all%20contributors&logo=github&style=for-the-badge" /></a>
     <a href="https://github.com/irfanfebrian13/ProjectIFS/commits/master"> <img src="https://img.shields.io/github/last-commit/irfanfebrian13/ProjectIFS?color=blue&logo=github&style=for-the-badge" /></a>
@@ -9,8 +10,7 @@
     <a href="https://github.com/irfanfebrian13/ProjectIFS/network/members"> <img src="https://img.shields.io/github/forks/irfanfebrian13/ProjectIFS?logo=github&style=for-the-badge" /></a>
     <a href="https://pypi.org/project/Telethon/"> <img src="https://img.shields.io/pypi/v/telethon?label=telethon&logo=pypi&logoColor=white&style=for-the-badge" /></a>
     <img src="https://telegra.ph/file/bad7aaf671cc46bca7f76.jpg" alt="Image" width="800" height="600" />
-    <h2 align="center">Cintai Produk Lokal :)</h2>
-
+    <h2 align="center">Cintai Produk Lokal :)</h2>  
 </p>
 
 ```
