@@ -102,8 +102,8 @@ async def repo_is_here(wannasee):
         "┏━━━━━━━━━━━━━━━━━━━━━━━━"
         "\n┣[[Click Here](https://github.com/adekmaulana/ProjectBish) **To See ProjectBish Official Repo**"
         "\n┣[[Click Here](https://github.com/BianSepang/ProjectBish) **To see project BianSepang**"
-        "\n┣[[Click Here](https://github.com/irfanfebrian13/ProjectBish) **To see ProjectBish XBeanNoreal**
-        "\n┗━━━━━━━━━━━━━━━━━━━━━━━━
+        "\n┣[[Click Here](https://github.com/irfanfebrian13/ProjectBish) **To see ProjectBish XBeanNoreal**"
+        "\n┗━━━━━━━━━━━━━━━━━━━━━━━━")
     )
 
 
