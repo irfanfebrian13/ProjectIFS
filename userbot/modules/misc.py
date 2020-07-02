@@ -71,7 +71,7 @@ async def killdabot(event):
 async def reedme(e):
     await e.edit(
         "Here's something for you to read:\n"
-        "\n[ProjectBishUserBot's README.md file](https://github.com/irfanfebrian13/uh-manis/blob/master/README.md)"
+        "\n[ProjectBishUserBot's README.md file](https://github.com/irfanfebrian13/ProjectBish/blob/master/README.md)"
         "\n[Setup Guide - Basic](https://telegra.ph/How-to-host-a-Telegram-Userbot-11-02)"
         "\n[Setup Guide - Google Drive](https://telegra.ph/How-To-Setup-Google-Drive-04-03)"
         "\n[Setup Guide - LastFM Module](https://telegra.ph/How-to-set-up-LastFM-module-for-Paperplane-userbot-11-02)"
@@ -99,7 +99,11 @@ async def repeat(rep):
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
     await wannasee.edit(
-        "**Nih REPO Fork Gw Silahkan Di pake bitch**\n[Click Here](https://github.com/irfanfebrian13/uh-manis) "
+        "┏━━━━━━━━━━━━━━━━━━━━━━━━"
+        "\n┣[[Click Here](https://github.com/adekmaulana/ProjectBish) **To See ProjectBish Official Repo**"
+        "\n┣[[Click Here](https://github.com/BianSepang/ProjectBish) **To see project BianSepang**"
+        "\n┣[[Click Here](https://github.com/irfanfebrian13/ProjectBish) **To see ProjectBish XBeanNoreal**
+        "\n┗━━━━━━━━━━━━━━━━━━━━━━━━
     )
 
 
