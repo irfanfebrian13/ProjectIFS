@@ -38,7 +38,6 @@ async def variable(var):
     exe = var.pattern_match.group(1)
     if app is None:
          await var.edit("`Please setup your`  **HEROKU_APP_NAME**.")
-         
         return False
     if exe == "get":
         await var.edit("`Getting information...`")
