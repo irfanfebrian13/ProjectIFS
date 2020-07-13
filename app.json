@@ -164,6 +164,10 @@
       "description": "Input your DEEZER ARL TOKEN",
       "value": "",
       "required": false
+    },
+    "ALIVE_LOGO": {
+      "description": "Show Image/Logo in .alive message",
+      "required": false
     }  
   },
   "addons": [
