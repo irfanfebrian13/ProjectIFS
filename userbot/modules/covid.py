@@ -24,15 +24,11 @@ async def corona(event):
         output_text += f"`😭Total Deaths    : {country_data['deaths']}`\n"
         output_text += f"`😍Total Recovered : {country_data['recovered']}`\n\n"
         output_text += f"`😥Critical cases  : {country_data['critical']}`\n"
-        output_text += f"`💉Total Tests     : {country_data['total_tests']}`\n\n"
-        output_text += (
-            "`Last update : "
-            f"{datetime.utcfromtimestamp(country_data['last_update'] // 1000).strftime('%Y-%m-%d %H:%M:%S')}`\n"
-        )
+        output_text += f"`💉Total Tests     : {country_data['total_tests']}`\n\n"     
         output_text += f"Data provided by [Worldometer](https://www.worldometers.info/coronavirus/country/{country})"
     else:
         output_text = "No information yet about this country!"
-    await event.edit(f"Corona Virus Info in {country}:\n\n{output_text}")
+    await event.edit(f"**Corona Virus Info in {country}:\n\n{output_text}**")
 
 
 CMD_HELP.update({
