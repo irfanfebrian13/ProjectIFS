@@ -14,7 +14,7 @@ from userbot.events import register
 async def corona(event):
     await event.edit("Processing...")
     country = event.pattern_match.group(1)
-    covid = Covid()
+    covid = Covid(source="worldometers")
     country_data = covid.get_status_by_country_name(country)
     if country_data:
         output_text  = f"`😕New Cases       : {country_data['new_cases']}`\n"
