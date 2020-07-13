@@ -168,6 +168,18 @@
     "ALIVE_LOGO": {
       "description": "Show Image/Logo in .alive message",
       "required": false
+    },
+    "ALIVE_NAME": {
+      "description": "Show username in .alive messages",
+      "required": false
+    }, 
+    "GIT_REPO_NAME": {
+      "description": "Set the repo for the gitupload module.",
+      "required": false
+    },
+    "GITHUB_ACCESS_TOKEN": {
+      "description": "Set this in order to make the gitupload work. you can look https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line to assist you.",
+      "required": false
     }  
   },
   "addons": [
