@@ -95,8 +95,6 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
             )
             return repo.__del__()
         await event.edit('`Userbot dyno build in progress, please wait...`')
-        
-        
         ups_rem.fetch(ac_br)
         repo.git.reset("--hard", "FETCH_HEAD")
         heroku_git_url = heroku_app.git_url.replace(
@@ -122,8 +120,6 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
                              'Restarting, please wait...`')
     else:
         await event.edit('`Please set up HEROKU_API_KEY variable...`')
-        
-        
     return
 
 
@@ -141,7 +137,7 @@ async def update(event, repo, ups_rem, ac_br):
     return
 
 
-@register(outgoing=True, pattern="^.update( now| deploy|$)")
+@register(outgoing=True, pattern="^\.update( now| deploy|$)")
 async def upstream(event):
     "For .update command, check if the bot is up to date, update if specified"
     await event.edit("`Getting information....`")
