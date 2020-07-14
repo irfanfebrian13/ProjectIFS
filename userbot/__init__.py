@@ -129,7 +129,7 @@ COUNTRY = str(os.environ.get("COUNTRY", ""))
 TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
 
 # Version of ProjectBish
-USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "3.4"
+USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "1.beta.6"
 
 # Clean Welcome
 CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
