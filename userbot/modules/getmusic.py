@@ -95,7 +95,7 @@ def getmusicvideo(cat):
             video_link = link.get("href")
             break
     video_link = "http://www.youtube.com/" + video_link
-    command = 'youtube-dl -f "[filesize<20M]" ' + video_link
+    command = 'youtube-dl -f "[filesize<50M]" --merge-output-format mp4 ' + video_link
     os.system(command)
 
 
@@ -169,6 +169,9 @@ async def _(event):
     if metadata.has("height"):
         height = metadata.get("height")
     await event.edit("`Uploading video.. Please wait..`")
+    os.system("cp *mp4 thumb.mp4")
+    os.system("ffmpeg -i thumb.mp4 -vframes 1 -an -s 480x360 -ss 5 thumb.jpg")
+    thumb_image = "thumb.jpg"
     c_time = time.time()
     await event.client.send_file(
         event.chat_id,
@@ -192,6 +195,7 @@ async def _(event):
         ),
     )
     await event.delete()
+    os.remove(thumb_image)
     os.system("rm -rf *.mkv")
     os.system("rm -rf *.mp4")
     os.system("rm -rf *.webm")
@@ -281,19 +285,19 @@ async def _(event):
         await event.delete()
 
 
-CMD_HELP.update({
-    "getmusic":
-    ">`.song` **Artist - Song Title**"
-    "\nUsage: Finding and uploading song."
-    "\n\n>`.vsong` **Artist - Song Title**"
-    "\nUsage: Finding and uploading videoclip."
-    "\n\n>`.net` **<Artist - Song Title>**"
-    "\nUsage: Download music with @WooMaiBot"
-    "\n\n>`.sdd` **<Spotify/Deezer Link>**"
-    "\nUsage: Download Spotify/Deezer Music with @MusicHuntersBot"
-    "\n\n>`.smd` **<Artist - Song Title>**"
-    "\nUsage: Download Spotify Music with @SpotifyMusicDownloaderBot"
-    "\n\n>`.deezload` **<spotify/deezer link> <Format>**"
-    "\nUsage: Download music from deezer."
-    "\n__Format=__ `FLAC`, `MP3_320`, `MP3_256`, `MP3_128`."
-})
+CMD_HELP.update(
+    {
+        "song": ">`.song` **Artist - Song Title**"
+        "\nUsage: Finding and uploading song.\n\n"
+        ">`.vsong` **Artist - Song Title**"
+        "\nUsage: Finding and uploading videoclip.\n\n"
+        ">`.smd` **Artist - Song Title**"
+        "\nUsage: Download music from spotify.\n\n"
+        ">`.net` **Artist - Song Title**"
+        "\nUsage: Download music with @WooMaiBot.\n\n"
+        ">`.sdd <Spotify/Deezer Link>`"
+        "\nUsage: Download music from Spotify or Deezer."
+        "\n__Format=__ `FLAC`, `MP3_320`, `MP3_256`, `MP3_128`."
+
+    }
+)
