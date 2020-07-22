@@ -9,34 +9,22 @@ Userbot module to help you manage a group
 from asyncio import sleep
 from os import remove
 
-from telethon.errors import (
-    BadRequestError,
-    ChatAdminRequiredError,
-    ChatNotModifiedError,
-    ImageProcessFailedError,
-    MessageTooLongError,
-    PhotoCropSizeSmallError,
-    UserAdminInvalidError,
-    UserIdInvalidError,
-)
-from telethon.tl.functions.channels import (
-    EditAdminRequest,
-    EditBannedRequest,
-    EditPhotoRequest,
-)
-from telethon.tl.functions.messages import (
-    EditChatDefaultBannedRightsRequest,
-    UpdatePinnedMessageRequest,
-)
-from telethon.tl.types import (
-    ChannelParticipantsAdmins,
-    ChannelParticipantsBots,
-    ChatAdminRights,
-    ChatBannedRights,
-    MessageEntityMentionName,
-    MessageMediaPhoto,
-    PeerChat,
-)
+from telethon.errors import (BadRequestError, ChatAdminRequiredError,
+                             ImageProcessFailedError, PhotoCropSizeSmallError,
+                             UserAdminInvalidError)
+from telethon.errors.rpcerrorlist import (BadRequestError,
+                                          MessageTooLongError,
+                                          UserIdInvalidError,
+                                          UserAdminInvalidError)
+from telethon.tl.functions.channels import (EditAdminRequest,
+                                            EditBannedRequest,
+                                            EditPhotoRequest)
+from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.tl.types import (PeerChat, ChannelParticipantsAdmins,
+                               ChatAdminRights, ChatBannedRights,
+                               MessageEntityMentionName, MessageMediaPhoto,
+                               ChannelParticipantsBots)
+
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 from userbot.events import register
 
@@ -431,7 +419,7 @@ async def unmoot(unmot):
                 f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
 
 
-@register(incoming=True)
+@register(incoming=True, disable_errors=True)
 async def muter(moot):
     """ Used for deleting the messages of muted people """
     try:
@@ -457,14 +445,8 @@ async def muter(moot):
                 try:
                     await moot.delete()
                     await moot.client(
-                        EditBannedRequest(moot.chat_id, moot.sender_id, rights)
-                    )
-                except (
-                    BadRequestError,
-                    UserAdminInvalidError,
-                    ChatAdminRequiredError,
-                    UserIdInvalidError,
-                ):
+                        EditBannedRequest(moot.chat_id, moot.sender_id, rights))
+                except (BadRequestError, UserAdminInvalidError, ChatAdminRequiredError, UserIdInvalidError):
                     await moot.client.send_read_acknowledge(moot.chat_id, moot.id)
     for i in gmuted:
         if i.sender == str(moot.sender_id):
