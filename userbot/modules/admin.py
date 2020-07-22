@@ -416,8 +416,8 @@ async def muter(moot):
     for i in gmuted:
         if i.sender == str(moot.sender_id):
             await moot.delete()
-            
-            
+
+
 @register(outgoing=True, pattern="^.ungmute(?: |$)(.*)")
 async def ungmoot(un_gmute):
     """ For .ungmute command, ungmutes the target in the userbot """
@@ -525,8 +525,7 @@ async def rm_deletedacc(show):
         if del_u > 0:
             del_status = (
                 f"`Found` **{del_u}** `ghost/deleted/zombie account(s) in this group,"
-                "\nclean them by using .zombies clean`"
-            )
+                "\nclean them by using .zombies clean`")
         return await show.edit(del_status)
 
     # Here laying the sanity check
@@ -562,7 +561,7 @@ async def rm_deletedacc(show):
     if del_a > 0:
         del_status = (f"Cleaned **{del_u}** deleted account(s) "
                       f"\n**{del_a}** deleted admin accounts are not removed"
-        )
+                      )
     await show.edit(del_status)
     await sleep(2)
     await show.delete()
@@ -572,8 +571,8 @@ async def rm_deletedacc(show):
             BOTLOG_CHATID, "#CLEANUP\n"
             f"Cleaned **{del_u}** deleted account(s) !!"
             f"\nCHAT: {show.chat.title}(`{show.chat_id}`)")
-            
-            
+
+
 @register(outgoing=True, pattern="^.all$")
 async def tagaso(event):
     """ For .all command, mention all of the member in the group chat"""
@@ -585,7 +584,7 @@ async def tagaso(event):
     async for user in bot.iter_participants(chat, 500):
         mentions += f"[\u2063](tg://user?id={user.id})"
     await bot.send_message(
-        chat, mentions, reply_to=event.message.reply_to_msg_id)            
+        chat, mentions, reply_to=event.message.reply_to_msg_id)
 
 
 @register(outgoing=True, pattern="^.admins$")
@@ -774,7 +773,7 @@ async def get_user_from_id(user, event):
 
     return user_obj
 
-  
+
 @register(outgoing=True, pattern="^.usersdel ?(.*)")
 async def get_usersdel(show):
     """ For .usersdel command, list all of the deleted users in a chat. """
@@ -791,7 +790,7 @@ async def get_usersdel(show):
         else:
             searchq = show.pattern_match.group(1)
             async for user in show.client.iter_participants(
-                   show.chat_id, search=f'{searchq}'):
+                    show.chat_id, search=f'{searchq}'):
                 if not user.deleted:
                     mentions += f"\n[{user.first_name}](tg://user?id={user.id}) `{user.id}`"
          #       else:
@@ -899,35 +898,34 @@ async def get_bots(show):
         remove("botlist.txt")
 
 
-CMD_HELP.update({
-    "admin":
-    ">`.promote <username/reply> <custom rank (optional)>`"
-    "\nUsage: Provides admin rights to the person in the chat."
-    "\n\n>`.demote <username/reply>`"
-    "\nUsage: Revokes the person's admin permissions in the chat."
-    "\n\n>`.ban <username/reply> <reason (optional)>`"
-    "\nUsage: Bans the person off your chat."
-    "\n\n>`.unban <username/reply>`"
-    "\nUsage: Removes the ban from the person in the chat."
-    "\n\n>`.mute <username/reply> <reason (optional)>`"
-    "\nUsage: Mutes the person in the chat, works on admins too."
-    "\n\n>`.unmute <username/reply>`"
-    "\nUsage: Removes the person from the muted list."
-    "\n\n>`.gmute` <username/reply> <reason (optional)>"
-	"\nUsage: Mutes the person in all groups you have in common with them."
-	"\n\n>`.ungmute` <username/reply>"
-	"\nUsage: Reply someone's message with .ungmute to remove them from the gmuted list."
-    "\n\n>`.zombies`"
-    "\nUsage: Searches for deleted accounts in a group. "
-    "Use .zombies clean to remove deleted accounts from the group."
-    "\n\n>`.all`"
-	"\nUsage: Tag all member in the group chat."
-    "\n\n>`.admins`"
-    "\nUsage: Retrieves a list of admins in the chat."
-    "\n\n>`.bots`"
-    "\nUsage: Retrieves a list of bots in the chat."
-    "\n\n>`.users` or >`.users <name of member>`"
-    "\nUsage: Retrieves all (or queried) users in the chat."
-    "\n\n>`.setgppic <reply to image>`"
-    "\nUsage: Changes the group's display picture."
-})
+CMD_HELP.update(
+    {
+        "admin": ">`.promote <username/reply> <custom rank (optional)>`"
+        "\nUsage: Provides admin rights to the person in the chat."
+        "\n\n>`.demote <username/reply>`"
+        "\nUsage: Revokes the person's admin permissions in the chat."
+        "\n\n>`.ban <username/reply> <reason (optional)>`"
+        "\nUsage: Bans the person off your chat."
+        "\n\n>`.unban <username/reply>`"
+        "\nUsage: Removes the ban from the person in the chat."
+        "\n\n>`.mute <username/reply> <reason (optional)>`"
+        "\nUsage: Mutes the person in the chat, works on admins too."
+        "\n\n>`.unmute <username/reply>`"
+        "\nUsage: Removes the person from the muted list."
+        "\n\n>`.gmute` <username/reply> <reason (optional)>"
+        "\nUsage: Mutes the person in all groups you have in common with them."
+        "\n\n>`.ungmute` <username/reply>"
+        "\nUsage: Reply someone's message with .ungmute to remove them from the gmuted list."
+        "\n\n>`.zombies`"
+        "\nUsage: Searches for deleted accounts in a group. "
+        "Use .zombies clean to remove deleted accounts from the group."
+        "\n\n>`.all`"
+        "\nUsage: Tag all member in the group chat."
+        "\n\n>`.admins`"
+        "\nUsage: Retrieves a list of admins in the chat."
+        "\n\n>`.bots`"
+        "\nUsage: Retrieves a list of bots in the chat."
+        "\n\n>`.users` or >`.users <name of member>`"
+        "\nUsage: Retrieves all (or queried) users in the chat."
+        "\n\n>`.setgppic <reply to image>`"
+        "\nUsage: Changes the group's display picture."})

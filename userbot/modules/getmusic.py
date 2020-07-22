@@ -25,6 +25,8 @@ from userbot.events import register
 from userbot.utils import progress
 
 # For song module
+
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     up_time = ""
@@ -49,22 +51,31 @@ def get_readable_time(seconds: int) -> str:
 
     return up_time
 
+
 def getmusic(get, DEFAULT_AUDIO_QUALITY):
-  search = get
+    search = get
 
-  headers = {'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
 
-  html = requests.get('https://www.youtube.com/results?search_query='+search, headers=headers).text
-  soup = BeautifulSoup(html, 'html.parser')
-  for link in soup.find_all('a'):
-    if '/watch?v=' in link.get('href'):
-        # May change when Youtube Website may get updated in the future.
-        video_link = link.get('href')
-        break
+    html = requests.get(
+        'https://www.youtube.com/results?search_query=' +
+        search,
+        headers=headers).text
+    soup = BeautifulSoup(html, 'html.parser')
+    for link in soup.find_all('a'):
+        if '/watch?v=' in link.get('href'):
+            # May change when Youtube Website may get updated in the future.
+            video_link = link.get('href')
+            break
 
-  video_link =  'http://www.youtube.com/'+video_link
-  command = ('youtube-dl --extract-audio --audio-format mp3 --audio-quality ' +DEFAULT_AUDIO_QUALITY + ' ' + video_link)
-  os.system(command)
+    video_link = 'http://www.youtube.com/' + video_link
+    command = (
+        'youtube-dl --extract-audio --audio-format mp3 --audio-quality ' +
+        DEFAULT_AUDIO_QUALITY +
+        ' ' +
+        video_link)
+    os.system(command)
 
 
 # For getvideosong
@@ -104,7 +115,7 @@ async def _(event):
         await event.edit("`What I am Supposed to find?`")
         return
 
-    getmusic(str(query),"320k")
+    getmusic(str(query), "320k")
     l = glob.glob("*.mp3")
     loa = l[0]
     await event.edit("`Yeah.. Uploading your song..`")
@@ -122,7 +133,7 @@ async def _(event):
     )
     await event.delete()
     os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)
+    subprocess.check_output("rm -rf *.mp3", shell=True)
 
 
 @register(outgoing=True, pattern=r"^\.vsong(?: |$)(.*)")
@@ -222,26 +233,26 @@ async def _(event):
     link = f"/netease {song}"
     await event.edit("```Getting Your Music```")
     async with bot.conversation(chat) as conv:
-          await asyncio.sleep(2)
-          await event.edit("`Downloading...Please wait`")
-          try:
-              msg = await conv.send_message(link)
-              response = await conv.get_response()
-              respond = await conv.get_response()
-              """ - don't spam notif - """
-              await bot.send_read_acknowledge(conv.chat_id)
-          except YouBlockedUserError:
-              await event.reply("```Please unblock @WooMaiBot and try again```")
-              return
-          await event.edit("`Sending Your Music...`")
-          await asyncio.sleep(3)
-          await bot.send_file(event.chat_id, respond)
+        await asyncio.sleep(2)
+        await event.edit("`Downloading...Please wait`")
+        try:
+            msg = await conv.send_message(link)
+            response = await conv.get_response()
+            respond = await conv.get_response()
+            """ - don't spam notif - """
+            await bot.send_read_acknowledge(conv.chat_id)
+        except YouBlockedUserError:
+            await event.reply("```Please unblock @WooMaiBot and try again```")
+            return
+        await event.edit("`Sending Your Music...`")
+        await asyncio.sleep(3)
+        await bot.send_file(event.chat_id, respond)
     await event.client.delete_messages(conv.chat_id,
                                        [msg.id, response.id, respond.id])
     await event.delete()
-    
 
-@register(outgoing=True, pattern="^\.sdd(?: |$)(.*)")
+
+@register(outgoing=True, pattern=r"^\.sdd(?: |$)(.*)")
 async def _(event):
     if event.fwd_from:
         return

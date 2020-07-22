@@ -159,10 +159,10 @@ G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
 G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
-                                         
+
 # Zipfile module
 ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY",
-                                         "./zips")                                         
+                                        "./zips")
 
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
@@ -229,7 +229,7 @@ async def check_botlog_chatid():
 with bot:
     try:
         bot.loop.run_until_complete(check_botlog_chatid())
-    except:
+    except BaseException:
         LOGS.info(
             "BOTLOG_CHATID environment variable isn't a "
             "valid entity. Check your environment variables/config.env file.")
