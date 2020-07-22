@@ -183,6 +183,7 @@
     },
      "WEATHER_DEFLANG": {
       "description": "Set the default language for the userbot's weather module.",
+      "value": "en",
       "required": false
     }
   },
