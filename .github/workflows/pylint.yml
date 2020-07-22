@@ -28,6 +28,6 @@ jobs:
           commit_message: 'pylint: auto fixes'
           commit_options: '--no-verify'
           repository: .
-          commit_user_name: BianSepang
-          commit_user_email: bianconneri46@gmail.com
-          commit_author: BianSepang <bianconneri46@gmail.com>
+          commit_user_name: irfanfebrian13
+          commit_user_email: irfanifebrians13@gmail.com
+          commit_author: irfanfebrian13 <irfanifebrians13@gmail.com>
