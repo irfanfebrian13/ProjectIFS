@@ -12,9 +12,9 @@ from datetime import datetime
 from os import remove
 from platform import python_version, uname
 from shutil import which
-
 import psutil
 from telethon import __version__, version
+
 from userbot import bot, CMD_HELP, ALIVE_NAME, UPSTREAM_REPO_BRANCH, ALIVE_LOGO
 from userbot.events import register
 
@@ -26,7 +26,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
 @register(outgoing=True, pattern=r"^\.spc")
 async def psu(event):
     uname = platform.uname()
-    softw = f"**System Information**\n"
+    softw = "**System Information**\n"
     softw += f"`System   : {uname.system}`\n"
     softw += f"`Release  : {uname.release}`\n"
     softw += f"`Version  : {uname.version}`\n"
@@ -36,7 +36,7 @@ async def psu(event):
     bt = datetime.fromtimestamp(boot_time_timestamp)
     softw += f"`Boot Time: {bt.day}/{bt.month}/{bt.year}  {bt.hour}:{bt.minute}:{bt.second}`\n"
     # CPU Cores
-    cpuu = f"**CPU Info**\n"
+    cpuu = "**CPU Info**\n"
     cpuu += "`Physical cores   : " + \
         str(psutil.cpu_count(logical=False)) + "`\n"
     cpuu += "`Total cores      : " + \
@@ -47,14 +47,14 @@ async def psu(event):
     cpuu += f"`Min Frequency    : {cpufreq.min:.2f}Mhz`\n"
     cpuu += f"`Current Frequency: {cpufreq.current:.2f}Mhz`\n\n"
     # CPU usage
-    cpuu += f"**CPU Usage Per Core**\n"
+    cpuu += "**CPU Usage Per Core**\n"
     for i, percentage in enumerate(psutil.cpu_percent(percpu=True)):
         cpuu += f"`Core {i}  : {percentage}%`\n"
-    cpuu += f"**Total CPU Usage**\n"
+    cpuu += "**Total CPU Usage**\n"
     cpuu += f"`All Core: {psutil.cpu_percent()}%`\n"
     # RAM Usage
     svmem = psutil.virtual_memory()
-    memm = f"**Memory Usage**\n"
+    memm = "**Memory Usage**\n"
     memm += f"`Total     : {get_size(svmem.total)}`\n"
     memm += f"`Available : {get_size(svmem.available)}`\n"
     memm += f"`Used      : {get_size(svmem.used)}`\n"
@@ -62,7 +62,7 @@ async def psu(event):
     help_string = f"{str(softw)}\n"
     help_string += f"{str(cpuu)}\n"
     help_string += f"{str(memm)}\n"
-    help_string += f"**Engine Info**\n"
+    help_string += "**Engine Info**\n"
     help_string += f"`Python {sys.version}`\n"
     help_string += f"`Telethon {__version__}`"
     await event.edit(help_string)
@@ -97,7 +97,7 @@ async def sysdetails(sysd):
             await sysd.edit("`Install neofetch first !!`")
 
 
-@register(outgoing=True, pattern="^.botver$")
+@register(outgoing=True, pattern=r"^\.botver$")
 async def bot_ver(event):
     """ For .botver command, get the bot version. """
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
@@ -139,7 +139,7 @@ async def bot_ver(event):
             )
 
 
-@register(outgoing=True, pattern="^.pip(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.pip(?: |$)(.*)")
 async def pipcheck(pip):
     """ For .pip command, do a pip search. """
     if not pip.text[0].isalpha() and pip.text[0] not in ("/", "#", "@", "!"):
@@ -188,21 +188,17 @@ async def pipcheck(pip):
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     logo = ALIVE_LOGO
-    output = (f"╔─━━━━━━━━━**INFO**━━━━━━━━─╗\n"
-              f"┣-❏**•ProjectBish Is Running•**-❏ \n"
-              f"╚─━━━━━━━━━**INFO**━━━━━━━━─╝\n\n"
-              f"┏━━━━━━━━━━━━━━━━━━━━━━━━\n"
-              f"┣[ 🗣️ `User        :` {DEFAULTUSER}\n"
-              f"┣[ 🧿 `Running on  : {UPSTREAM_REPO_BRANCH} `\n"
-              f"┣[ ☠️ `Python      : v{python_version()}`\n"
-              f"┣[ 🔧 `Telethon    : v{version.__version__}`\n"
-              f"┣[ ♈ `Version     : v{USERBOT_VERSION} `\n"
-              f"┗━━━━━━━━━━━━━━━━━━━━━━━━\n")
+    output = (f"`ProjectBish` is running on `{UPSTREAM_REPO_BRANCH}`\n"
+              f"====================================\n"
+              f"🐍 `Python    :` v{python_version()}\n"
+              f"⚙️ `Telethon  :` v{version.__version__}\n"
+              f"👤 `User      :` {DEFAULTUSER}\n"
+              f"====================================\n")
     await bot.send_file(alive.chat_id, logo, caption=output)
     await alive.delete()
 
 
-@register(outgoing=True, pattern="^.aliveu")
+@register(outgoing=True, pattern=r"^\.aliveu")
 async def amireallyaliveuser(username):
     """ For .aliveu command, change the username in the .alive command. """
     message = username.text
@@ -215,7 +211,7 @@ async def amireallyaliveuser(username):
     await username.edit("`" f"{output}" "`")
 
 
-@register(outgoing=True, pattern="^.resetalive$")
+@register(outgoing=True, pattern=r"^\.resetalive$")
 async def amireallyalivereset(ureset):
     """ For .resetalive command, reset the username in the .alive command. """
     global DEFAULTUSER
@@ -223,18 +219,23 @@ async def amireallyalivereset(ureset):
     await ureset.edit("`" "Successfully reset user for alive!" "`")
 
 
-CMD_HELP.update({"sysd": ">`.sysd`"
-                 "\nUsage: Shows system information using neofetch.\n\n"
-                 ">`.spc`"
-                 "\nUsage: Show system specification.",
-                 "botver": ">`.botver`"
-                 "\nUsage: Shows the userbot version.",
-                 "pip": ">`.pip <module(s)>`"
-                 "\nUsage: Does a search of pip modules(s).",
-                 "alive": ">`.alive`"
-                 "\nUsage: Type .alive to see wether your bot is working or not."
-                 "\n\n>`.aliveu <text>`"
-                 "\nUsage: Changes the 'user' in alive to the text you want."
-                 "\n\n>`.resetalive`"
-                 "\nUsage: Resets the user to default.",
-                 })
+CMD_HELP.update({
+    "sysd":
+    ">`.sysd`"
+    "\nUsage: Shows system information using neofetch."
+    "\n\n>`.spc`"
+    "\nUsage: Show system specification.",
+    "botver":
+    ">`.botver`"
+    "\nUsage: Shows the userbot version.",
+    "pip":
+    ">`.pip <module(s)>`"
+    "\nUsage: Does a search of pip modules(s).",
+    "alive":
+    ">`.alive`"
+    "\nUsage: Type .alive to see wether your bot is working or not."
+    "\n\n>`.aliveu <text>`"
+    "\nUsage: Changes the 'user' in alive to the text you want."
+    "\n\n>`.resetalive`"
+    "\nUsage: Resets the user to default."
+})
