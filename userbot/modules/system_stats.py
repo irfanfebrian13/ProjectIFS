@@ -218,10 +218,10 @@ async def amireallyalive(alive):
     """ For .on command, check if the bot is running.  """
     uptime = await get_readable_time((time.time() - StartTime))
     logo = ALIVE_LOGO
-    output = (f"╔─━━━━━━━━━**INFO**━━━━━━━─╗\n"
-              f"┣-❏**•ProjectBish Is Running•**-❏ \n"
-              f"      -❏`{uptime}`❏-\n"
-              f"╚─━━━━━━━━━**INFO**━━━━━━━─╝\n\n"
+    output = (f"╔─━━━━━━━━**INFO**━━━━━━━─╗\n"
+              f"  -❏**•ProjectBish Is Running•**❏- \n"
+              f"            -❏`{uptime}`❏-\n"
+              f"╚─━━━━━━━━**INFO**━━━━━━━─╝\n\n"
               f"┏━━━━━━━━━━━━━━━━━━━━━━━━\n"
               f"┣[ 🗣️ `User        :` {DEFAULTUSER}\n"
               f"┣[ 🧿 `Running on  : {UPSTREAM_REPO_BRANCH} `\n"
