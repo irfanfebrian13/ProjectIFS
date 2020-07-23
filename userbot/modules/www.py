@@ -25,19 +25,24 @@ async def speedtst(spd):
     test.upload()
     test.results.share()
     result = test.results.dict()
-
-    await spd.edit("`"
-                   "Started at "
-                   f"{result['timestamp']} \n\n"
-                   "Download "
-                   f"{speed_convert(result['download'])} \n"
-                   "Upload "
-                   f"{speed_convert(result['upload'])} \n"
-                   "Ping "
-                   f"{result['ping']} \n"
-                   "ISP "
-                   f"{result['client']['isp']}"
-                   "`")
+    path = wget.download(result["share"])
+    output = f"Started at `{result['timestamp']}`\n\n"
+    output += "Client:\n\n"
+    output += f"ISP: `{result['client']['isp']}`\n"
+    output += f"Country: `{result['client']['country']}`\n\n"
+    output += "Server:\n"
+    output += f"Name: `{result['server']['name']}`\n"
+    output += f"Country: `{result['server']['country']}, {result['server']['cc']}`\n"
+    output += f"Sponsor: `{result['server']['sponsor']}`\n"
+    output += f"Latency: `{result['server']['latency']}`\n\n"
+    output += f"Ping: `{result['ping']}`\n"
+    output += f"Sent: `{humanbytes(result['bytes_sent'])}`\n"
+    output += f"Received: `{humanbytes(result['bytes_received'])}`\n"
+    output += f"Download: `{humanbytes(result['download'] / 8)}/s`\n"
+    output += f"Upload: `{humanbytes(result['upload'] / 8)}/s`"
+    await spd.delete()
+    await spd.client.send_file(spd.chat_id, path, caption=output, force_document=False)
+    os.remove(path)
 
 
 def speed_convert(size):
