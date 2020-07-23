@@ -24,9 +24,15 @@ async def help(event):
         head3 = "Usage: .help <module name>"
         head4 = "List for all available command below: "
         string = ""
+<<<<<<< HEAD
         sep1 = "━━━━━━━━━━░★░━━━━━━━━━━━"
         sep2 = "════════════════════════"
+        for i in CMD_HELP:
+=======
+        sep1 = "••••••••••••••••••••••••••••••••••••••••••••••"
+        sep2 = "========================================="
         for i in sorted(CMD_HELP):
+>>>>>>> 062c327... help: sort help list alphabetically
             string += "`" + str(i)
             string += "`  ┗[❒]  "
         await event.edit(f"{head}\
