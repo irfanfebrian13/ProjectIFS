@@ -733,7 +733,7 @@ def is_gif(file):
     if not is_video(file):
         return False
     return DocumentAttributeAnimated() in getattr(
-            file, "document", file).attributes
+        file, "document", file).attributes
 
 
 CMD_HELP.update({
