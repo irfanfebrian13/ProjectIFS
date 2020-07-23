@@ -188,9 +188,9 @@ async def pipcheck(pip):
 async def amireallyalive(alive):
     """ For .alive command, check if the bot is running.  """
     logo = ALIVE_LOGO
-   output = (f"╔─━━━━━━━━━**INFO**━━━━━━─╗\n"	    
+    output = (f"╔─━━━━━━━━━**INFO**━━━━━━━─╗\n"	    
               f"┣-❏**•ProjectBish Is Running•**-❏ \n"	           
-              f"╚─━━━━━━━━━**INFO**━━━━━━─╝\n\n"	
+              f"╚─━━━━━━━━━**INFO**━━━━━━━─╝\n\n"	
               f"┏━━━━━━━━━━━━━━━━━━━━━━━━\n"	
               f"┣[ 🗣️ `User        :` {DEFAULTUSER}\n"	              
               f"┣[ 🧿 `Running on  : {UPSTREAM_REPO_BRANCH} `\n"	            
