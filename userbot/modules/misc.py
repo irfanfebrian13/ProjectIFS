@@ -78,7 +78,7 @@ async def reedme(e):
         "\n[Setup Guide - From MiHub with Pict](https://www.mihub.my.id/2020/05/jadiuserbot.html)"
         "\n[Setup Guide - In Indonesian Language](https://telegra.ph/UserIndoBot-05-21-3)"
         "\n[Note - How to get Deezer ARL TOKEN](https://notabug.org/RemixDevs/DeezloaderRemix/wiki/Login+via+userToken)")
-    
+
 
 # Copyright (c) Gegham Zakaryan | 2019
 @register(outgoing=True, pattern="^.repeat (.*)")
