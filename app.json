@@ -138,9 +138,9 @@
       "description": "Set the default city for the userbot's weather module.",
       "required": false
     },
-    "QUOTES_API_TOKEN": {
-      "description": "API for quotes module get it from http://antiddos.systems",
-      "value": ""
+    "WEATHER_DEFLANG": {
+      "description": "Set the default language for the userbot's weather module.",
+      "value": "en",
     },
     "LOGSPAMMER": {
       "description": "Set this to True in case you want the error logs to be stored in the userbot log group, instead of spitting out the file in the current chat, requires a valid BOTLOG_CHATID to be set.",
@@ -152,25 +152,12 @@
       "value": "",
       "required": false
     },
-    "ALIVE_LOGO": {
-      "description": "Show Image/Logo in .alive message",
+    "G_PHOTOS_CLIENT_ID": {
+      "description": "get the client id from https://j.mp/39lWQQm",
       "required": false
     },
-    "ALIVE_NAME": {
-      "description": "Show username in .alive messages",
-      "required": false
-    }, 
-    "GIT_REPO_NAME": {
-      "description": "Set the repo for the gitupload module.",
-      "required": false
-    },
-    "GITHUB_ACCESS_TOKEN": {
-      "description": "Set this in order to make the gitupload work. you can look https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line to assist you.",
-      "required": false
-    },
-     "WEATHER_DEFLANG": {
-      "description": "Set the default language for the userbot's weather module.",
-      "value": "en",
+    "G_PHOTOS_CLIENT_SECRET": {
+      "description": "get the client secret from https://j.mp/39lWQQm",
       "required": false
     }
   },
