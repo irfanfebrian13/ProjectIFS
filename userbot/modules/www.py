@@ -7,7 +7,8 @@
     Information Superhighway (yes, Internet). """
 
 from datetime import datetime
-
+import wget
+import os
 from speedtest import Speedtest
 from telethon import functions
 from userbot import CMD_HELP
@@ -45,17 +46,17 @@ async def speedtst(spd):
     os.remove(path)
 
 
-def speed_convert(size):
-    """
-    Hi human, you can't read bytes?
-    """
-    power = 2**10
-    zero = 0
-    units = {0: '', 1: 'Kb/s', 2: 'Mb/s', 3: 'Gb/s', 4: 'Tb/s'}
+def humanbytes(size: float) -> str:
+    """humanize size"""
+    if not size:
+        return ""
+    power = 1024
+    t_n = 0
+    power_dict = {0: " ", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
     while size > power:
         size /= power
-        zero += 1
-    return f"{round(size, 2)} {units[zero]}"
+        t_n += 1
+    return "{:.2f} {}B".format(size, power_dict[t_n])
 
 
 @register(outgoing=True, pattern="^.dc$")
