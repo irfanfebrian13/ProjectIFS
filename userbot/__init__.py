@@ -116,6 +116,9 @@ OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
 WEATHER_DEFCITY = os.environ.get("WEATHER_DEFCITY", None)
 WEATHER_DEFLANG = os.environ.get("WEATHER_DEFLANG") or None
 
+# Deezloader
+DEEZER_ARL_TOKEN = os.environ.get("DEEZER_ARL_TOKEN", None)
+
 # Anti Spambot Config
 ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT", "False"))
 ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT", "False"))
@@ -126,9 +129,6 @@ ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
 # Time & Date - Country and Time Zone
 COUNTRY = str(os.environ.get("COUNTRY", ""))
 TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
-
-# Version of ProjectBish
-USERBOT_VERSION = os.environ.get("USERBOT_VERSION") or "1.beta.6"
 
 # Clean Welcome
 CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
@@ -175,12 +175,6 @@ TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
 
 # Genius Lyrics API
 GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
-
-# Quote
-QUOTES_API_TOKEN = os.environ.get("QUOTES_API_TOKEN", None)
-
-# Deezloader
-DEEZER_ARL_TOKEN = os.environ.get("DEEZER_ARL_TOKEN", None)
 
 # JustWatch Country
 WATCH_COUNTRY = os.environ.get("WATCH_COUNTRY", None)
