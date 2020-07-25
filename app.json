@@ -154,6 +154,9 @@
     "WATCH_COUNTRY": {
       "description": "Country code for justwatch.com",
       "value": "ID",
+    },
+    "WOLFRAM_ID": {
+      "description": "Get an API KEY from products.wolframalpha.com/api/",
       "required": false
     }
   },

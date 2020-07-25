@@ -175,6 +175,16 @@ if G_PHOTOS_AUTH_TOKEN_ID:
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
 
+# Wolfram ID
+# Get an API KEY from products.wolframalpha.com/api/
+WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
+
+# Zipfile module
+ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY", "./zips")
+
+# Genius Lyrics API
+GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
+
 # Genius Lyrics API
 GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
 

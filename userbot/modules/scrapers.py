@@ -26,13 +26,27 @@ from gtts.lang import tts_langs
 from emoji import get_emoji_regexp
 from youtube_search import YoutubeSearch
 from youtube_dl import YoutubeDL
-from youtube_dl.utils import (DownloadError, ContentTooShortError,
-                              ExtractorError, GeoRestrictedError,
-                              MaxDownloadsReached, PostProcessingError,
-                              UnavailableVideoError, XAttrMetadataError)
 from asyncio import sleep
-from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID,
-                     TEMP_DOWNLOAD_DIRECTORY)
+from youtube_dl.utils import (
+    ContentTooShortError,
+    DownloadError,
+    ExtractorError,
+    GeoRestrictedError,
+    MaxDownloadsReached,
+    PostProcessingError,
+    UnavailableVideoError,
+    XAttrMetadataError,
+)
+
+from userbot import (
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    IMG_LIMIT,
+    TEMP_DOWNLOAD_DIRECTORY,
+    WOLFRAM_ID,
+    YOUTUBE_API_KEY,
+)
 from userbot.events import register
 from telethon.tl.types import DocumentAttributeAudio
 from userbot.utils import progress, chrome, googleimagesdownload
@@ -125,7 +139,7 @@ async def img_sampler(event):
     await event.delete()
 
 
-@register(outgoing=True, pattern="^.currency (.*)")
+@register(outgoing=True, pattern="^.crc (.*)")
 async def moni(event):
     input_str = event.pattern_match.group(1)
     input_sgra = input_str.split(" ")
@@ -489,7 +503,7 @@ async def yt_search(event):
     await event.edit(output, link_preview=False)
 
 
-@register(outgoing=True, pattern=r".rip(audio|video) (.*)")
+@register(outgoing=True, pattern=r".r(a|v) (.*)")
 async def download_video(v_url):
     """ For .rip command, download media from YouTube and many other sites. """
     url = v_url.pattern_match.group(2)
@@ -497,7 +511,7 @@ async def download_video(v_url):
 
     await v_url.edit("`Preparing to download...`")
 
-    if type == "audio":
+    if type == "a":
         opts = {
             'format':
             'bestaudio',
@@ -528,7 +542,7 @@ async def download_video(v_url):
         video = False
         song = True
 
-    elif type == "video":
+    elif type == "v":
         opts = {
             'format':
             'best',
@@ -618,47 +632,60 @@ async def download_video(v_url):
         await v_url.delete()
 
 
+@register(outgoing=True, pattern=r"^\.wolfram (.*)")
+async def wolfram(wvent):
+    if WOLFRAM_ID is None:
+        await wvent.edit(
+            "Please set your WOLFRAM_ID first !\n"
+            "Get your API KEY from [here](https://"
+            "products.wolframalpha.com/api/)",
+            parse_mode="Markdown",
+        )
+        return
+    i = wvent.pattern_match.group(1)
+    appid = WOLFRAM_ID
+    server = f"https://api.wolframalpha.com/v1/spoken?appid={appid}&i={i}"
+    res = get(server)
+    await wvent.edit(f"**{i}**\n\n" + res.text, parse_mode="Markdown")
+    if BOTLOG:
+        await wvent.client.send_message(
+            BOTLOG_CHATID, f".wolfram {i} was executed successfully"
+        )
+
+
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
     return get_emoji_regexp().sub("", inputString)
 
 
-CMD_HELP.update({
-    "img":
-    ">`.img <search_query>`"
-    "\nUsage: Does an image search on Google and shows 5 images.",
-    "currency":
-    ">`.currency <amount> <from> <to>`"
-    "\nUsage: Converts various currencies for you.",
-    "carbon":
-    ">`.carbon <text> [or reply]`"
-    "\nUsage: Beautify your code using carbon.now.sh\n"
-    "Use .crblang <text> to set language for your code.",
-    "google":
-    ">`.google <query>`"
-    "\nUsage: Does a search on Google.",
-    "wiki":
-    ">`.wiki <query>`"
-    "\nUsage: Does a search on Wikipedia.",
-    "ud":
-    ">`.ud <query>`"
-    "\nUsage: Does a search on Urban Dictionary.",
-    "tts":
-    ">`.tts <text> [or reply]`"
-    "\nUsage: Translates text to speech for the language which is set."
-    "\nUse >`.lang tts <language code>` to set language for tts. (Default is English.)",
-    "trt":
-    ">`.trt <text> [or reply]`"
-    "\nUsage: Translates text to the language which is set."
-    "\nUse >`.lang trt <language code>` to set language for trt. (Default is English)",
-    "yt":
-    ">`.yt <text>`"
-    "\nUsage: Does a YouTube search.",
-    "imdb":
-    ">`.imdb <movie-name>`"
-    "\nUsage: Shows movie info and other stuff.",
-    "rip":
-    ">`.ripaudio <url> or ripvideo <url>`"
-    "\nUsage: Download videos and songs from YouTube "
-    "(and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html))."
-})
+CMD_HELP.update(
+    {
+        "img": ">`.img <search_query>`"
+        "\nUsage: Does an image search on Google and shows **IMG_LIMIT** images.",
+        "currency": ">`.crc <amount> <from> <to>`"
+        "\nUsage: Converts various currencies for you.",
+        "carbon": ">`.carbon <text> [or reply]`"
+        "\nUsage: Beautify your code using carbon.now.sh\n"
+        "Use .crblang <text> to set language for your code.",
+        "google": ">`.google <query>`"
+        "\nUsage: Does a search on Google.",
+        "wiki": ">`.wiki <query>`"
+        "\nUsage: Does a search on Wikipedia.",
+        "ud": ">`.ud <query>`"
+        "\nUsage: Does a search on Urban Dictionary.",
+        "tts": ">`.tts <text> [or reply]`"
+        "\nUsage: Translates text to speech for the language which is set."
+        "\nUse >`.lang tts <language code>` to set language for tts. (Default is English.)",
+        "trt": ">`.trt <text> [or reply]`"
+        "\nUsage: Translates text to the language which is set."
+        "\nUse >`.lang trt <language code>` to set language for trt. (Default is English)",
+        "yt": ">`.yt <text>`"
+        "\nUsage: Does a YouTube search.",
+        "imdb": ">`.imdb <movie-name>`"
+        "\nUsage: Shows movie info and other stuff.",
+        "rip": ">`.ra <url> or .rv <url>`"
+        "\nUsage: Download videos and songs from YouTube "
+        "(and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).",
+        "wolfram": ">`.wolfram` <query>"
+        "\nUsage: Get answers to questions using WolframAlpha Spoken Results API",
+    })
