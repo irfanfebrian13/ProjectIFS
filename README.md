@@ -4,6 +4,10 @@
 <h4 align="center">Based on RaphielGang's <a href="https://github.com/RaphielGang/Telegram-UserBot">Paperplane</a> Telegram userbot...</h4>
 <p align="center"><a href="#how-to-host">How To Host</a> | <a href="#credits">Credits</a> | <a href="#setting-up-google-drive">Setting up Google Drive</a> | <a href="#license">License</a></p>
 <p align="center">&nbsp;</p>
+<h2 align="center">Generate String Session</h2>
+<h5 align="center">Click the button below to Generate String Session on repl.it</h5>
+<p align="center"><a href="https://GenerateSession.irfanfebrian.repl.run/"> <img src="https://img.shields.io/badge/run-string__session.py-blue?style=for-the-badge&logo=repl.it" alt="generate_string_session" /></a></p>
+<p align="center">&nbsp;</p>
 <h2 align="center">How To Host</h2>
 <h5 align="center">The easiest way to deploy this derpfest! is click on the image below</h5>
 <p align="center"><a href="https://heroku.com/deploy?template=https://github.com/irfanfebrian13/ProjectBish/tree/master"> <img src="https://camo.githubusercontent.com/83b0e95b38892b49184e07ad572c94c8038323fb/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e737667" alt="Deploy to Heroku" /></a></p>
