@@ -26,6 +26,8 @@ from userbot.events import register
 from userbot.utils import progress
 
 # For song module
+
+
 def getmusic(get, DEFAULT_AUDIO_QUALITY):
     search = get
 
@@ -293,7 +295,4 @@ CMD_HELP.update(
         "\nUsage: Download current LastFM scrobble use `@WooMaiBot`.\n\n"
         ">`.sdd <Spotify/Deezer Link>`"
         "\nUsage: Download music from Spotify or Deezer use `@MusicHuntersBot`."
-        "\n__Format=__ `FLAC`, `MP3_320`, `MP3_256`, `MP3_128`."
-
-    }
-)
+        "\n__Format=__ `FLAC`, `MP3_320`, `MP3_256`, `MP3_128`."})
