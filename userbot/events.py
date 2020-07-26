@@ -15,7 +15,7 @@ from traceback import format_exc
 
 from telethon import events
 
-from userbot import bot, BOTLOG, BOTLOG_CHATID, LOGSPAMMER
+from userbot import bot, BOTLOG, BOTLOG_CHATID
 
 
 def register(**args):
@@ -60,10 +60,6 @@ def register(**args):
                 # Messages sent in channels can be edited by other users.
                 # Ignore edits that take place in channels.
                 return
-            if not LOGSPAMMER:
-                send_to = check.chat_id
-            else:
-                send_to = BOTLOG_CHATID
 
             if not trigger_on_fwd and check.fwd_from:
                 return
@@ -151,11 +147,7 @@ def register(**args):
                             "error.log",
                             caption=text,
                         )
-
-                        await check.client.send_file(send_to,
-                                                     "error.log",
-                                                     caption=text)
-                        remove("error.log")
+                    remove("error.log")
             else:
                 pass
 
