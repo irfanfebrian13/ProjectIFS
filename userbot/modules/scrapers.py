@@ -440,21 +440,49 @@ async def lang(value):
             f"`Language for {scraper} changed to {LANG.title()}.`")
 
 
-@register(outgoing=True, pattern="^.yt (.*)")
-async def yt_search(video_q):
+@register(outgoing=True, pattern=r"^\.yt (\d*) *(.*)")
+async def yt_search(event):
     """ For .yt command, do a YouTube search from Telegram. """
-    query = video_q.pattern_match.group(1)
+
+    if event.pattern_match.group(1) != "":
+        counter = int(event.pattern_match.group(1))
+        if counter > 10:
+            counter = int(10)
+        if counter <= 0:
+            counter = int(1)
+    else:
+        counter = int(3)
+
+    query = event.pattern_match.group(2)
+
     if not query:
-        await video_q.edit("`Enter query to search`")
-    await video_q.edit("`Processing...`")
+        return await event.edit("`Enter a query to search.`")
+    await event.edit("`Processing...`")
+
     try:
-        results = json.loads(YoutubeSearch(query, max_results=7).to_json())
+        results = json.loads(
+            YoutubeSearch(
+                query,
+                max_results=counter).to_json())
     except KeyError:
-        return await video_q.edit("`Youtube Search gone retard.\nCan't search this query!`")
-    output = f"**Search Query:**\n`{query}`\n\n**Results:**\n\n"
+        return await event.edit(
+            "`Youtube Search gone retard.\nCan't search this query!`"
+        )
+
+    output = f"**Search Query:**\n`{query}`\n\n**Results:**\n"
+
     for i in results["videos"]:
-        output += (f"● `{i['title']}`\nhttps://www.youtube.com{i['url_suffix']}\n\n")
-    await video_q.edit(output, link_preview=False)
+        try:
+            title = i["title"]
+            link = "https://youtube.com" + i["url_suffix"]
+            channel = i["channel"]
+            duration = i["duration"]
+            views = i["views"]
+            output += f"[{title}]({link})\nChannel: `{channel}`\nDuration: {duration} | {views}\n\n"
+        except IndexError:
+            break
+
+    await event.edit(output, link_preview=False)
 
 
 @register(outgoing=True, pattern=r".rip(audio|video) (.*)")
@@ -588,7 +616,7 @@ async def download_video(v_url):
 
 def deEmojify(inputString):
     """ Remove emojis and other non-safe characters from string """
-    return get_emoji_regexp().sub(u'', inputString)
+    return get_emoji_regexp().sub("", inputString)
 
 
 CMD_HELP.update({
