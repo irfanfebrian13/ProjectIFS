@@ -1,6 +1,3 @@
-# Copyright (C) 2020 Aidil Aryanto.
-# All rights reserved.
-
 import asyncio
 import glob
 import os
@@ -14,11 +11,6 @@ from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from pylast import User
 from telethon import events
-from telethon.errors import (
-    MessageEmptyError,
-    MessageNotModifiedError,
-    MessageTooLongError,
-)
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.types import DocumentAttributeVideo
 
@@ -26,31 +18,31 @@ from userbot import CMD_HELP, LASTFM_USERNAME, bot, lastfm
 from userbot.events import register
 from userbot.utils import progress
 
+
 # For song module
-
-
 def getmusic(get, DEFAULT_AUDIO_QUALITY):
     search = get
 
     headers = {
-        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'}
+        "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+    }
 
     html = requests.get(
-        'https://www.youtube.com/results?search_query=' +
+        "https://www.youtube.com/results?search_query=" +
         search,
         headers=headers).text
-    soup = BeautifulSoup(html, 'html.parser')
-    for link in soup.find_all('a'):
-        if '/watch?v=' in link.get('href'):
+    soup = BeautifulSoup(html, "html.parser")
+    for link in soup.find_all("a"):
+        if "/watch?v=" in link.get("href"):
             # May change when Youtube Website may get updated in the future.
-            video_link = link.get('href')
+            video_link = link.get("href")
             break
 
-    video_link = 'http://www.youtube.com/' + video_link
+    video_link = "http://www.youtube.com/" + video_link
     command = (
-        'youtube-dl --extract-audio --audio-format mp3 --audio-quality ' +
+        "youtube-dl --write-thumbnail --extract-audio --audio-format mp3 --audio-quality " +
         DEFAULT_AUDIO_QUALITY +
-        ' ' +
+        " " +
         video_link)
     os.system(command)
 
@@ -95,12 +87,20 @@ async def _(event):
     getmusic(str(query), "320k")
     l = glob.glob("*.mp3")
     loa = l[0]
+    img_extensions = ["webp", "jpg", "jpeg", "webp"]
+    img_filenames = [
+        fn_img
+        for fn_img in os.listdir()
+        if any(fn_img.endswith(ext_img) for ext_img in img_extensions)
+    ]
+    thumb_image = img_filenames[0]
     await event.edit("`Yeah.. Uploading your song..`")
     c_time = time.time()
     await event.client.send_file(
         event.chat_id,
         loa,
         force_document=True,
+        thumb=thumb_image,
         allow_cache=False,
         caption=query,
         reply_to=reply_to_id,
@@ -110,6 +110,7 @@ async def _(event):
     )
     await event.delete()
     os.system("rm -rf *.mp3")
+    os.remove(thumb_image)
     subprocess.check_output("rm -rf *.mp3", shell=True)
 
 
@@ -153,7 +154,8 @@ async def _(event):
     await event.client.send_file(
         event.chat_id,
         loa,
-        force_document=True,
+        force_document=False,
+        thumb=thumb_image,
         allow_cache=False,
         caption=query,
         supports_streaming=True,
@@ -311,5 +313,4 @@ CMD_HELP.update(
         ">`.net now`"
         "\nUsage: Download current LastFM scrobble use `@WooMaiBot`.\n\n"
         ">`.sdd <Spotify/Deezer Link>`"
-        "\nUsage: Download music from Spotify or Deezer use `@MusicHuntersBot`."
-        "\n__Format=__ `FLAC`, `MP3_320`, `MP3_256`, `MP3_128`."})
+        "\nUsage: Download music from Spotify or Deezer use `@MusicHuntersBot`."})
