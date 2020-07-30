@@ -220,7 +220,7 @@ async def amireallyalive(alive):
     uptime = await get_readable_time((time.time() - StartTime))
     logo = ALIVE_LOGO
     output = (f"╔─━━━━━━━━**INFO**━━━━━━━─╗\n"
-              f"  -❏**•ProjectBish Is Running•**❏- \n"
+              f"  -❏**•ProjectIFS Is Running•**❏- \n"
               f"            -❏`{uptime}`❏-\n"
               f"╚─━━━━━━━━**INFO**━━━━━━━─╝\n\n"
               f"┏━━━━━━━━━━━━━━━━━━━━━━━━\n"
