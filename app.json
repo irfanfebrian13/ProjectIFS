@@ -1,6 +1,6 @@
 {
-  "name": "Project Bish UserBot",
-  "description": "[projectbish] A modular Telegram userbot running on Python 3.8",
+  "name": "ProjectIFS UserBot",
+  "description": "[ProjectIFS] A modular Telegram userbot running on Python 3.8",
   "keywords": [
     "telegram",
     "userbot",
@@ -8,7 +8,7 @@
     "modular",
     "productivity"
   ],
-  "repository": "https://github.com/BianSepang/ProjectBish",
+  "repository": "https://github.com/irfanfebrian13/ProjectBish",
   "website": "https://telegra.ph/How-to-host-a-Telegram-Userbot-11-02",
   "stack": "container",
   "env": {
@@ -36,6 +36,10 @@
     },
     "UPSTREAM_REPO_URL": {
       "description": "In case you maintain a fork, add your repo URL here.",
+      "required": false
+    },
+    "UPSTREAM_REPO_BRANCH": {
+      "description": "Default branch of your custom fork repo.",
       "required": false
     },
     "COUNTRY": {
@@ -133,14 +137,53 @@
       "value": "en",
       "required": false
     },
+    "TERM_ALIAS": {
+      "description": "Leave if u don't know",
+      "value": "",
+      "required": false
+    },
+    "BOT_TOKEN": {
+      "description": "Create new bot and give BOT TOKEN",
+      "value": "",
+      "required": true
+    },
+    "BOT_USERNAME": {
+      "description": "Your bot username",
+      "value": "",
+      "required": true
+    },
+    "ALIVE_NAME": {
+      "description": "For .alive name",
+      "value": "",
+      "required": false
+    },
+    "IMG_LIMIT": {
+      "description": "Set limit for .img module",
+      "value": "3",
+      "required": true
+    },
+    "BITLY_TOKEN": {
+      "description": "Your Bit.ly API key, get it from 'https://bitly.com/a/sign_up'",
+      "value": "",
+      "required": false
+    },
     "LOGSPAMMER": {
       "description": "Set this to True in case you want the error logs to be stored in the userbot log group, instead of spitting out the file in the current chat, requires a valid BOTLOG_CHATID to be set.",
-      "value": "False"
-
+      "value": "True"
+    },
+    "WATCH_COUNTRY": {
+      "description": "Country code for justwatch.com",
+      "value": "ID",
+      "required": false
     },
     "DEEZER_ARL_TOKEN": {
       "description": "Input your DEEZER ARL TOKEN",
       "value": "",
+      "required": false
+    },
+    "TZ": {
+      "description": "Your timezone",
+      "value": "Asia/Jakarta",
       "required": false
     },
     "G_PHOTOS_CLIENT_ID": {
@@ -150,10 +193,6 @@
     "G_PHOTOS_CLIENT_SECRET": {
       "description": "get the client secret from https://j.mp/39lWQQm",
       "required": false
-    },
-    "WATCH_COUNTRY": {
-      "description": "Country code for justwatch.com",
-      "value": "ID",
     },
     "WOLFRAM_ID": {
       "description": "Get an API KEY from products.wolframalpha.com/api/",
