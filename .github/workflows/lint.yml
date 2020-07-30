@@ -1,6 +1,7 @@
-name: pylint
-
-on: [push, pull_request]
+name: PEP8
+on:
+  push:
+    branches: [ '*' ]
 
 jobs:
   PEP8:
