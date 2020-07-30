@@ -132,6 +132,10 @@ ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
 COUNTRY = str(os.environ.get("COUNTRY", ""))
 TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
 
+# Set default timezone
+TZ = os.environ.get("TZ", "Asia/Jakarta")
+time.tzset()
+
 # Clean Welcome
 CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
 
@@ -158,6 +162,8 @@ G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
 G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
 G_DRIVE_AUTH_TOKEN_DATA = os.environ.get("G_DRIVE_AUTH_TOKEN_DATA", None)
 G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
+
+# Download directory location
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
                                          "./downloads")
 
@@ -178,12 +184,6 @@ TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
 # Wolfram ID
 # Get an API KEY from products.wolframalpha.com/api/
 WOLFRAM_ID = os.environ.get("WOLFRAM_ID", None)
-
-# Zipfile module
-ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY", "./zips")
-
-# Genius Lyrics API
-GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
 
 # Genius Lyrics API
 GENIUS = os.environ.get("GENIUS_ACCESS_TOKEN", None)
