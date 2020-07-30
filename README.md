@@ -30,6 +30,8 @@
 
 ## What is it?
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9f9a519b3e7c4ba48905ac39e7160acc)](https://app.codacy.com/manual/irfanfebrian13/ProjectIFS?utm_source=github.com&utm_medium=referral&utm_content=irfanfebrian13/ProjectIFS&utm_campaign=Badge_Grade_Dashboard)
+
 Alpha is modular Telegram userbot running on Python 3.8+ with an sqlalchemy database.
 
 Based on [Paperplane](https://github.com/RaphielGang/Telegram-UserBot) and [ProjectBish](https://github.com/adekmaulana/ProjectBish) userbot.
