@@ -44,7 +44,7 @@ from userbot import (
     CMD_HELP,
     IMG_LIMIT,
     TEMP_DOWNLOAD_DIRECTORY,
-    WOLFRAM_ID,   
+    WOLFRAM_ID,
 )
 from userbot.events import register
 from telethon.tl.types import DocumentAttributeAudio
