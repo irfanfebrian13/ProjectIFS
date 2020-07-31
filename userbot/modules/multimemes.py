@@ -325,7 +325,131 @@ async def fryerrr(fry):
     return os.remove(downloaded_file_name)
 
 
-@register(outgoing=True, pattern="^.waifu(?: |$)(.*)")
+@register(pattern=r"^\.deepfry(?: |$)(.*)", outgoing=True)
+async def deepfryer(event):
+    try:
+        frycount = int(event.pattern_match.group(1))
+        if frycount < 1:
+            raise ValueError
+    except ValueError:
+        frycount = 1
+
+    if event.is_reply:
+        reply_message = await event.get_reply_message()
+        data = await check_media(reply_message)
+
+        if isinstance(data, bool):
+            await event.edit("`I can't deep fry that!`")
+            return
+    else:
+        await event.edit("`Reply to an image or sticker to deep fry it!`")
+        return
+
+    # download last photo (highres) as byte array
+    await event.edit("`Downloading media…`")
+    image = io.BytesIO()
+    await event.client.download_media(data, image)
+    image = Image.open(image)
+
+    # fry the image
+    await event.edit("`Deep frying media…`")
+    for _ in range(frycount):
+        image = await deepfry(image)
+
+    fried_io = io.BytesIO()
+    fried_io.name = "image.jpeg"
+    image.save(fried_io, "JPEG")
+    fried_io.seek(0)
+
+    await event.reply(file=fried_io)
+
+
+async def deepfry(img: Image) -> Image:
+    colours = (
+        (randint(50, 200), randint(40, 170), randint(40, 190)),
+        (randint(190, 255), randint(170, 240), randint(180, 250))
+    )
+
+    img = img.copy().convert("RGB")
+
+    # Crush image to hell and back
+    img = img.convert("RGB")
+    width, height = img.width, img.height
+    img = img.resize((int(width ** uniform(0.8, 0.9)),
+                      int(height ** uniform(0.8, 0.9))), resample=Image.LANCZOS)
+    img = img.resize((int(width ** uniform(0.85, 0.95)),
+                      int(height ** uniform(0.85, 0.95))), resample=Image.BILINEAR)
+    img = img.resize((int(width ** uniform(0.89, 0.98)),
+                      int(height ** uniform(0.89, 0.98))), resample=Image.BICUBIC)
+    img = img.resize((width, height), resample=Image.BICUBIC)
+    img = ImageOps.posterize(img, randint(3, 7))
+
+    # Generate colour overlay
+    overlay = img.split()[0]
+    overlay = ImageEnhance.Contrast(overlay).enhance(uniform(1.0, 2.0))
+    overlay = ImageEnhance.Brightness(overlay).enhance(uniform(1.0, 2.0))
+
+    overlay = ImageOps.colorize(overlay, colours[0], colours[1])
+
+    # Overlay red and yellow onto main image and sharpen the hell out of it
+    img = Image.blend(img, overlay, uniform(0.5, 0.9))
+    img = ImageEnhance.Sharpness(img).enhance(randint(5, 300))
+
+    return img
+
+
+async def check_media(reply_message):
+    if reply_message and reply_message.media:
+        if reply_message.photo:
+            data = reply_message.photo
+        elif reply_message.document:
+            if DocumentAttributeFilename(
+                    file_name='AnimatedSticker.tgs') in reply_message.media.document.attributes:
+                return False
+            if reply_message.gif or reply_message.video or reply_message.audio or reply_message.voice:
+                return False
+            data = reply_message.media.document
+        else:
+            return False
+    else:
+        return False
+
+    if not data or data is None:
+        return False
+    else:
+        return data
+
+
+@register(outgoing=True, pattern=r"^\.sg(?: |$)(.*)")
+async def lastname(steal):
+    if steal.fwd_from:
+        return
+    if not steal.reply_to_msg_id:
+        await steal.edit("```Reply to any user message.```")
+        return
+    message = await steal.get_reply_message()
+    chat = "@SangMataInfo_bot"
+    user_id = message.sender.id
+    id = f"/search_id {user_id}"
+    if message.sender.bot:
+        await steal.edit("```Reply to actual users message.```")
+        return
+    await steal.edit("```Sit tight while I steal some data from NASA```")
+    async with bot.conversation(chat) as conv:
+        try:
+            await conv.send_message(id)
+            await conv.get_response()
+            response = await conv.get_response()
+        except YouBlockedUserError:
+            await steal.reply("```Please unblock @sangmatainfo_bot and try again```")
+            return
+        if response.text.startswith("No records"):
+            await steal.edit("```No records found for this user```")
+        else:
+            await steal.edit(f"{response.message}")
+
+
+@register(outgoing=True, pattern=r"^\.waifu(?: |$)(.*)")
 async def waifu(animu):
     text = animu.pattern_match.group(1)
     if not text:
@@ -379,4 +503,9 @@ CMD_HELP.update({
         ".waifu \
           \nUsage: Enchance your text with beautiful anime girl templates. \
           \n@StickerizerBot"
+
+CMD_HELP.update({
+    "sangmata":
+        ".sg \
+          \nUsage: View user history.\n"
 })
