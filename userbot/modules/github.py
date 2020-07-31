@@ -17,30 +17,46 @@ GIT_TEMP_DIR = "./userbot/temp/"
 
 @register(outgoing=True, pattern=r".git (.*)")
 async def github(event):
-    username = event.pattern_match.group(1)
-    URL = f"https://api.github.com/users/{username}"
-    await event.get_chat()
+    URL = f"https://api.github.com/users/{event.pattern_match.group(1)}"
     async with aiohttp.ClientSession() as session:
         async with session.get(URL) as request:
             if request.status == 404:
-                return await event.reply(f"`{username} not found`")
+                return await event.reply(
+                    "`" + event.pattern_match.group(1) + " not found`"
+                )
 
             result = await request.json()
 
             url = result.get("html_url", None)
             name = result.get("name", None)
             company = result.get("company", None)
+            blog = result.get("blog", None)
+            loc = result.get("location", None)
+            email = result.get("email", None)
             bio = result.get("bio", None)
+            twitter = result.get("twitter_username", None)
+            repo = result.get("public_repos", None)
+            gist = result.get("public_gists", None)
+            followers = result.get("followers", None)
+            following = result.get("following", None)
             created_at = result.get("created_at", "Not Found")
 
             REPLY = (
-                f"GitHub Info for `{username}`\n"
-                f"Username: `{name}`\n"
-                f"Bio: `{bio}`\n"
-                f"URL: {url}\n"
-                f"Company: `{company}`\n"
-                f"Created at: `{created_at}`\n"
-                f"More info : [Here](https://api.github.com/users/{username}/events/public)")
+                f"GitHub Info for `{event.pattern_match.group(1)}`"
+                f"\nUsername: `{name}`"
+                f"\nURL: {url}"
+                f"\nTwitter: https://twitter.com/{twitter}"
+                f"\nBlog: {blog}"
+                f"\nBio: `{bio}`"
+                f"\nLocation: `{loc}`"
+                f"\nEmail: {email}"
+                f"\nCompany: `{company}`"
+                f"\nPublic Repos: `{repo}`"
+                f"\nPublic Gists: `{gist}`"
+                f"\nFollowers: `{followers}`"
+                f"\nFollowing: `{following}`"
+                f"\nCreated at: `{created_at}`"
+            )
 
             if not result.get("repos_url", None):
                 return await event.edit(REPLY)

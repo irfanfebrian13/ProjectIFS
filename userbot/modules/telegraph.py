@@ -1,16 +1,18 @@
 import os
-from PIL import Image
 from datetime import datetime
-from telegraph import Telegraph, upload_file, exceptions
-from userbot import (TEMP_DOWNLOAD_DIRECTORY, CMD_HELP, bot)
+
+from PIL import Image
+from telegraph import Telegraph, exceptions, upload_file
+
+from userbot import CMD_HELP, TEMP_DOWNLOAD_DIRECTORY, bot
 from userbot.events import register
 
 telegraph = Telegraph()
-r = telegraph.create_account(short_name="telegraph")
+r = telegraph.create_account(short_name="TELEGRAPH")
 auth_url = r["auth_url"]
 
 
-@register(outgoing=True, pattern=r"^\.tg (m|t)$")
+@register(outgoing=True, pattern=r"^\.tg(m|t)$")
 async def telegraphs(graph):
     """ For .telegraph command, upload media & text to telegraph site. """
     await graph.edit("`Processing...`")
@@ -26,25 +28,34 @@ async def telegraphs(graph):
             input_str = graph.pattern_match.group(1)
             if input_str == "m":
                 downloaded_file_name = await bot.download_media(
-                    r_message,
-                    TEMP_DOWNLOAD_DIRECTORY
+                    r_message, TEMP_DOWNLOAD_DIRECTORY
                 )
                 end = datetime.now()
                 ms = (end - start).seconds
-                await graph.edit("Downloaded to {} in {} seconds.".format(downloaded_file_name, ms))
+                await graph.edit(
+                    "Downloaded to {} in {} seconds.".format(downloaded_file_name, ms)
+                )
                 try:
                     if downloaded_file_name.endswith((".webp")):
                         resize_image(downloaded_file_name)
                 except AttributeError:
                     return await graph.edit("`No media provided`")
                 try:
+                    start = datetime.now()
                     media_urls = upload_file(downloaded_file_name)
                 except exceptions.TelegraphException as exc:
                     await graph.edit("ERROR: " + str(exc))
                     os.remove(downloaded_file_name)
                 else:
+                    end = datetime.now()
+                    ms_two = (end - start).seconds
                     os.remove(downloaded_file_name)
-                    await graph.edit("Successfully Uploaded to [telegra.ph](https://telegra.ph{}).".format(media_urls[0]), link_preview=True)
+                    await graph.edit(
+                        "Successfully Uploaded to [telegra.ph](https://telegra.ph{}).".format(
+                            media_urls[0], (ms + ms_two)
+                        ),
+                        link_preview=True,
+                    )
             elif input_str == "t":
                 user_object = await bot.get_entity(r_message.from_id)
                 title_of_page = user_object.first_name  # + " " + user_object.last_name
@@ -54,8 +65,7 @@ async def telegraphs(graph):
                     if page_content != "":
                         title_of_page = page_content
                     downloaded_file_name = await bot.download_media(
-                        r_message,
-                        TEMP_DOWNLOAD_DIRECTORY
+                        r_message, TEMP_DOWNLOAD_DIRECTORY
                     )
                     m_list = None
                     with open(downloaded_file_name, "rb") as fd:
@@ -65,10 +75,16 @@ async def telegraphs(graph):
                     os.remove(downloaded_file_name)
                 page_content = page_content.replace("\n", "<br>")
                 response = telegraph.create_page(
-                    title_of_page,
-                    html_content=page_content
+                    title_of_page, html_content=page_content
                 )
-                await graph.edit("Successfully uploaded to [telegra.ph](https://telegra.ph/{}).".format(response["path"]), link_preview=True)
+                end = datetime.now()
+                ms = (end - start).seconds
+                await graph.edit(
+                    "Successfully uploaded to [telegra.ph](https://telegra.ph/{}).".format(
+                        response["path"], ms
+                    ),
+                    link_preview=True,
+                )
         else:
             await graph.edit("`Reply to a message to get a permanent telegra.ph link.`")
 
@@ -78,8 +94,5 @@ def resize_image(image):
     im.save(image, "PNG")
 
 
-CMD_HELP.update({
-    "telegraph":
-    ">`.tg m|t`"
-    "\nUsage: Upload m(media) & t(text) on Telegraph."
-})
+CMD_HELP.update({"telegraph": ">`.tg`<m|t>"
+                 "\nUsage: Upload t(text) or m(media) on Telegraph."})

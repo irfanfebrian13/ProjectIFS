@@ -2,21 +2,26 @@
 #
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
-
-import os
-import aria2p
 import math
+import os
 from asyncio import sleep
 from subprocess import PIPE, Popen
-from userbot import LOGS, CMD_HELP, TEMP_DOWNLOAD_DIRECTORY
+
+import aria2p
+from requests import get
+
+from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import register
 from userbot.utils import humanbytes
-from requests import get
 
 
 def subprocess_run(cmd):
-    subproc = Popen(cmd, stdout=PIPE, stderr=PIPE,
-                    shell=True, universal_newlines=True)
+    subproc = Popen(
+        cmd,
+        stdout=PIPE,
+        stderr=PIPE,
+        shell=True,
+        universal_newlines=True)
     talk = subproc.communicate()
     exitCode = subproc.returncode
     if exitCode != 0:
@@ -26,14 +31,14 @@ def subprocess_run(cmd):
 
 # Get best trackers for improved download speeds, thanks K-E-N-W-A-Y.
 trackers_list = get(
-    'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt'
-).text.replace('\n\n', ',')
+    "https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt"
+).text.replace("\n\n", ",")
 trackers = f"[{trackers_list}]"
 
 cmd = f"aria2c \
 --enable-rpc \
 --rpc-listen-all=false \
---rpc-listen-port 6800 \
+--rpc-listen-port 8210 \
 --max-connection-per-server=10 \
 --rpc-max-request-size=1024M \
 --seed-time=0.01 \
@@ -49,15 +54,18 @@ cmd = f"aria2c \
 subprocess_run(cmd)
 if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
     os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
-download_path = os.getcwd() + TEMP_DOWNLOAD_DIRECTORY.strip('.')
+download_path = os.getcwd() + TEMP_DOWNLOAD_DIRECTORY.strip(".")
 
-aria2 = aria2p.API(aria2p.Client(host="http://localhost", port=6800,
-                                 secret=""))
+aria2 = aria2p.API(
+    aria2p.Client(
+        host="http://localhost",
+        port=8210,
+        secret=""))
 
-aria2.set_global_options({'dir': download_path})
+aria2.set_global_options({"dir": download_path})
 
 
-@register(outgoing=True, pattern="^.amag(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.amag(?: |$)(.*)")
 async def magnet_download(event):
     magnet_uri = event.pattern_match.group(1)
     # Add Magnet URI Into Queue
@@ -73,22 +81,21 @@ async def magnet_download(event):
     await check_progress_for_dl(gid=new_gid, event=event, previous=None)
 
 
-@register(outgoing=True, pattern="^.ator(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.ator(?: |$)(.*)")
 async def torrent_download(event):
     torrent_file_path = event.pattern_match.group(1)
     # Add Torrent Into Queue
     try:
-        download = aria2.add_torrent(torrent_file_path,
-                                     uris=None,
-                                     options=None,
-                                     position=None)
+        download = aria2.add_torrent(
+            torrent_file_path, uris=None, options=None, position=None
+        )
     except Exception as e:
         return await event.edit(str(e))
     gid = download.gid
     await check_progress_for_dl(gid=gid, event=event, previous=None)
 
 
-@register(outgoing=True, pattern="^.aurl(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.aurl(?: |$)(.*)")
 async def aurl_download(event):
     uri = [event.pattern_match.group(1)]
     try:  # Add URL Into Queue
@@ -104,7 +111,7 @@ async def aurl_download(event):
         await check_progress_for_dl(gid=new_gid, event=event, previous=None)
 
 
-@register(outgoing=True, pattern="^.aclear(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.aclear(?: |$)(.*)")
 async def remove_all(event):
     try:
         removed = aria2.remove_all(force=True)
@@ -119,7 +126,7 @@ async def remove_all(event):
     await sleep(2.5)
 
 
-@register(outgoing=True, pattern="^.apause(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.apause(?: |$)(.*)")
 async def pause_all(event):
     # Pause ALL Currently Running Downloads.
     await event.edit("`Pausing downloads...`")
@@ -129,7 +136,7 @@ async def pause_all(event):
     await sleep(2.5)
 
 
-@register(outgoing=True, pattern="^.aresume(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.aresume(?: |$)(.*)")
 async def resume_all(event):
     await event.edit("`Resuming downloads...`")
     aria2.resume_all()
@@ -139,25 +146,35 @@ async def resume_all(event):
     await event.delete()
 
 
-@register(outgoing=True, pattern="^.ashow(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^\.ashow(?: |$)(.*)")
 async def show_all(event):
-    output = "output.txt"
     downloads = aria2.get_downloads()
     msg = ""
     for download in downloads:
-        msg = msg + "File: `" + str(download.name) + "`\nSpeed: " + str(
-            download.download_speed_string()) + "\nProgress: " + str(
-                download.progress_string()) + "\nTotal Size: " + str(
-                    download.total_length_string()) + "\nStatus: " + str(
-                        download.status) + "\nETA:  " + str(
-                            download.eta_string()) + "\n\n"
+        msg = (
+            msg
+            + "File: `"
+            + str(download.name)
+            + "`\nSpeed: "
+            + str(download.download_speed_string())
+            + "\nProgress: "
+            + str(download.progress_string())
+            + "\nTotal Size: "
+            + str(download.total_length_string())
+            + "\nStatus: "
+            + str(download.status)
+            + "\nETA:  "
+            + str(download.eta_string())
+            + "\n\n"
+        )
     if len(msg) <= 4096:
         await event.edit("`On-going Downloads: `\n" + msg)
         await sleep(5)
         await event.delete()
     else:
         await event.edit("`Output is too big, sending it as a file...`")
-        with open(output, 'w') as f:
+        output = "output.txt"
+        with open(output, "w") as f:
             f.write(msg)
         await sleep(2)
         await event.delete()
@@ -184,15 +201,23 @@ async def check_progress_for_dl(gid, event, previous):
         file = aria2.get_download(gid)
         complete = file.is_complete
         try:
-            if not complete and not file.error_message:
+            if not (complete or file.error_message):
                 percentage = int(file.progress)
                 downloaded = percentage * int(file.total_length) / 100
                 prog_str = "`Downloading` | [{0}{1}] `{2}`".format(
-                    "".join(["■" for i in range(
-                            math.floor(percentage / 10))]),
-                    "".join(["▨" for i in range(
-                            10 - math.floor(percentage / 10))]),
-                    file.progress_string())
+                    "".join(
+                        "●" for i in range(
+                            math.floor(
+                                percentage /
+                                10))),
+                    "".join(
+                        "○" for i in range(
+                            10 -
+                            math.floor(
+                                percentage /
+                                10))),
+                    file.progress_string(),
+                )
                 msg = (
                     f"`Name`: `{file.name}`\n"
                     f"`Status` -> **{file.status.capitalize()}**\n"
@@ -224,18 +249,19 @@ async def check_progress_for_dl(gid, event, previous):
             elif " depth exceeded" in str(e):
                 file.remove(force=True)
                 await event.edit(
-                    "Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead."
-                    .format(file.name))
+                    "Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(
+                        file.name
+                    )
+                )
 
 
-CMD_HELP.update({
-    "aria":
-    ">`.aurl [URL]` (or) >`.amag [Magnet Link]` (or) >`.ator [path to torrent file]`"
-    "\nUsage: Downloads the file into your userbot server storage."
-    "\n\n>`.apause (or) .aresume`"
-    "\nUsage: Pauses/resumes on-going downloads."
-    "\n\n>`.aclear`"
-    "\nUsage: Clears the download queue, deleting all on-going downloads."
-    "\n\n>`.ashow`"
-    "\nUsage: Shows progress of the on-going downloads."
-})
+CMD_HELP.update(
+    {
+        "aria": ">`.aurl [URL]` (or) >`.amag [Magnet Link]` (or) >`.ator [path to torrent file]`"
+        "\nUsage: Downloads the file into your userbot server storage."
+        "\n\n>`.apause (or) .aresume`"
+        "\nUsage: Pauses/resumes on-going downloads."
+        "\n\n>`.aclear`"
+        "\nUsage: Clears the download queue, deleting all on-going downloads."
+        "\n\n>`.ashow`"
+        "\nUsage: Shows progress of the on-going downloads."})

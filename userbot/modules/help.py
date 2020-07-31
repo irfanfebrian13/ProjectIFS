@@ -19,7 +19,7 @@ async def help(event):
         else:
             await event.edit("Please specify a valid module name.")
     else:
-        head = "**Help for** [XBeanNoreal](https://github.com/irfanfebrian13/ProjectBish)"
+        head = "**Help for** [ProjectIFS](https://github.com/irfanfebrian13/ProjectIFS)"
         head2 = "Please specify which module do you want help for !!"
         head3 = "Usage: .help <module name>"
         head4 = "List for all available command below: "
@@ -28,7 +28,7 @@ async def help(event):
         sep2 = "════════════════════════"
         for i in sorted(CMD_HELP):
             string += "`" + str(i)
-            string += "`  ┗[❒]  "
+            string += "`  ❒  "
         await event.edit(f"{head}\
               \n{sep2}\
               \n{head2}\
