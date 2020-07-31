@@ -1,6 +1,6 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module containing various scrapers. """
@@ -11,6 +11,7 @@ import asyncio
 import shutil
 import json
 from bs4 import BeautifulSoup
+import wikipedia
 import re
 from re import findall
 from urllib.parse import quote_plus
@@ -53,6 +54,7 @@ from userbot.utils import progress, chrome, googleimagesdownload
 CARBONLANG = "auto"
 TTS_LANG = "id"
 TRT_LANG = "id"
+WIKI_LANG = "id"
 
 
 @register(outgoing=True, pattern="^.crblang (.*)")
@@ -199,7 +201,15 @@ async def gsearch(q_event):
         )
 
 
-@register(outgoing=True, pattern=r"^.wiki (.*)")
+@register(outgoing=True, pattern=r"^\.wklang (.*)")
+async def setlang(wklang):
+    global WIKI_LANG
+    WIKI_LANG = wklang.pattern_match.group(1)
+    wikipedia.set_lang(f"{WIKI_LANG}")
+    await wklang.edit(f"Language for wikipedia set to {WIKI_LANG}")
+
+
+@register(outgoing=True, pattern=r"^\.wiki (.*)")
 async def wiki(wiki_q):
     """ For .wiki command, fetch content from Wikipedia. """
     match = wiki_q.pattern_match.group(1)
@@ -653,38 +663,48 @@ async def wolfram(wvent):
 
 
 def deEmojify(inputString):
-    """ Remove emojis and other non-safe characters from string """
-    return get_emoji_regexp().sub("", inputString)
+    """Remove emojis and other non-safe characters from string"""
+    return get_emoji_regexp().sub(u'', inputString)
 
 
-CMD_HELP.update(
-    {
-        "img": ">`.img <search_query>`"
-        "\nUsage: Does an image search on Google and shows **IMG_LIMIT** images.",
-        "currency": ">`.crc <amount> <from> <to>`"
-        "\nUsage: Converts various currencies for you.",
-        "carbon": ">`.carbon <text> [or reply]`"
-        "\nUsage: Beautify your code using carbon.now.sh\n"
-        "Use .crblang <text> to set language for your code.",
-        "google": ">`.google <query>`"
-        "\nUsage: Does a search on Google.",
-        "wiki": ">`.wiki <query>`"
-        "\nUsage: Does a search on Wikipedia.",
-        "ud": ">`.ud <query>`"
-        "\nUsage: Does a search on Urban Dictionary.",
-        "tts": ">`.tts <text> [or reply]`"
-        "\nUsage: Translates text to speech for the language which is set."
-        "\nUse >`.lang tts <language code>` to set language for tts. (Default is English.)",
-        "trt": ">`.trt <text> [or reply]`"
-        "\nUsage: Translates text to the language which is set."
-        "\nUse >`.lang trt <language code>` to set language for trt. (Default is English)",
-        "yt": ">`.yt <text>`"
-        "\nUsage: Does a YouTube search.",
-        "imdb": ">`.imdb <movie-name>`"
-        "\nUsage: Shows movie info and other stuff.",
-        "rip": ">`.ra <url> or .rv <url>`"
-        "\nUsage: Download videos and songs from YouTube "
-        "(and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html)).",
-        "wolfram": ">`.wolfram` <query>"
-        "\nUsage: Get answers to questions using WolframAlpha Spoken Results API",
-    })
+CMD_HELP.update({
+    "img":
+    ">`.img <search_query>`"
+    "\nUsage: Does an image search on Google and upload to Telegram.",
+    "currency":
+    ">`.currency <amount> <from> <to>`"
+    "\nUsage: Converts various currencies for you.",
+    "carbon":
+    ">`.carbon <text> [or reply]`"
+    "\nUsage: Beautify your code using carbon.now.sh\n"
+    "Use .crblang <text> to set language for your code.",
+    "google":
+    ">`.google <query>`"
+    "\nUsage: Does a search on Google.",
+    "wiki":
+    ">`.wiki <query>`"
+    "\nUsage: Does a search on Wikipedia.\n"
+    ">`.wklang` <language code> (Default is Indonesian)"
+    "\nUsage: Set language for wikipedia.",
+    "ud":
+    ">`.ud <query>`"
+    "\nUsage: Does a search on Urban Dictionary.",
+    "tts":
+    ">`.tts <text> [or reply]`"
+    "\nUsage: Translates text to speech for the language which is set."
+    "\nUse >`.lang tts <language code>` to set language for tts. (Default is Indonesian.)",
+    "trt":
+    ">`.trt <text> [or reply]`"
+    "\nUsage: Translates text to the language which is set."
+    "\nUse >`.lang trt <language code>` to set language for trt. (Default is Indonesian)",
+    "yt":
+    ">`.yt <text>`"
+    "\nUsage: Does a YouTube search.",
+    "imdb":
+    ">`.imdb <movie-name>`"
+    "\nUsage: Shows movie info and other stuff.",
+    "rip":
+    ">`.ripaudio <url> or ripvideo <url>`"
+    "\nUsage: Download videos and songs from YouTube "
+    "(and [many other sites](https://ytdl-org.github.io/youtube-dl/supportedsites.html))."
+})
