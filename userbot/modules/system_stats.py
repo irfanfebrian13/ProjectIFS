@@ -21,6 +21,7 @@ from userbot.events import register
 
 # ================= CONSTANT =================
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
+modules = CMD_HELP
 # ============================================
 
 
@@ -227,8 +228,9 @@ async def amireallyalive(alive):
               f"┣[ 🗣️ `User        :` {DEFAULTUSER}\n"
               f"┣[ 🧿 `Running on  : {UPSTREAM_REPO_BRANCH} `\n"
               f"┣[ ☠️ `Python      : v{python_version()}`\n"
-              f"┣[ 🔧 `Telethon    : v{version.__version__}`\n"
-              f"┗━━━━━━━━━━━━━━━━━━━━━━━━\n")
+              f"┣[ 🔧`Telethon    : v{version.__version__}`\n"
+              f"┗━━━━━━━━━━━━━━━━━━━━━━━━\n"
+              f"`❏All modules loaded :`{len(modules)}")
     await bot.send_file(alive.chat_id, logo, caption=output)
     await alive.delete()
 
