@@ -11,6 +11,8 @@
     <a href="https://github.com/irfanfebrian13/ProjectIFS/commits/master"> <img src="https://img.shields.io/github/last-commit/irfanfebrian13/ProjectIFS?color=blue&logo=github&style=for-the-badge" /></a>
     <a href="https://github.com/irfanfebrian13/ProjectIFS/issues"> <img src="https://img.shields.io/github/issues/irfanfebrian13/ProjectIFS?color=blue&logo=github&style=for-the-badge" /></a>
     <a href="https://github.com/irfanfebrian13/ProjectIFS/network/members"> <img src="https://img.shields.io/github/forks/irfanfebrian13/ProjectIFS?logo=github&style=for-the-badge" /></a>
+    <a href="https://hub.docker.com/r/irfanfebrian13/projectifs"> <img src="https://img.shields.io/docker/image-size/irfanfebrian13/projectifs/latest?label=docker%20image%20size&logo=docker&style=for-the-badge" /></a>
+    <a href="https://hub.docker.com/r/irfanfebrian13/projectifs/tags"> <img src="https://img.shields.io/docker/v/irfanfebrian13/projectifs/latest?label=docker%20version&logo=docker&style=for-the-badge" /></a>
     <a href="https://pypi.org/project/Telethon/"> <img src="https://img.shields.io/pypi/v/telethon?label=telethon&logo=pypi&logoColor=white&style=for-the-badge" /></a><br>
     <a href="https://t.me/userbotindo"> <img src="https://img.shields.io/badge/telegram-Support_Group-blue?style=social&logo=telegram" alt="support" /></a>
     <img src="https://telegra.ph/file/bad7aaf671cc46bca7f76.jpg" alt="Image" width="800" height="600" />
