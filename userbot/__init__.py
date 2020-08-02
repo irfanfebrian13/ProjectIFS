@@ -113,7 +113,7 @@ REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
 CHROME_DRIVER = (os.environ.get("CHROME_DRIVER")
                  or "/usr/bin/chromedriver")
 GOOGLE_CHROME_BIN = (os.environ.get("GOOGLE_CHROME_BIN")
-                     or "/usr/bin/google-chrome")
+                     or "/usr/bin/chromium")
 
 # OpenWeatherMap API Key
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -322,7 +322,7 @@ with bot:
                 result = builder.article(
                     "Please Use Only With .help Command",
                     text="{}\nTotal loaded modules: {}".format(
-                        "ProjectIFS modules helper.\n",
+                        "[ProjectIFS](https://github.com/irfanfebrian13/ProjectIFS) modules helper.\n",
                         len(dugmeler),
                     ),
                     buttons=buttons,
