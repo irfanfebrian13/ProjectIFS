@@ -74,10 +74,10 @@ async def set_afk(afk_e):
     afk_start = start_1.replace(microsecond=0)
     if string:
         AFKREASON = string
-        await afk_e.edit(f"**GW OFF DULU!**\n`I WILL BE OFF!( ಠ ʖ̯ ಠ)`\
+        await afk_e.edit(f"`I WILL BE OFF!( ಠ ʖ̯ ಠ)`\
         \nReason: `{string}`")
     else:
-        await afk_e.edit("**GW OFF DULU!**\n`I WILL BE OFF!( ಠ ʖ̯ ಠ)`")
+        await afk_e.edit("`I WILL BE OFF!( ಠ ʖ̯ ಠ)`")
     if BOTLOG:
         await afk_e.client.send_message(BOTLOG_CHATID, "#AFK\nYou went Away from Keyboard!")
     ISAFK = True
@@ -169,7 +169,7 @@ async def mention_afk(mention):
             afk_since = f"`{int(seconds)}s` ago"
         if mention.sender_id not in USERS:
             if AFKREASON:
-                await mention.reply(f"I'm AFK since {afk_since}.\
+                await mention.reply(f"__My Master Has Been Gone.__\n(Since **{afk_since}**).\n`Where He Is:` ~~ONLY GOD KNOWS~~\
                         \nReason: `{AFKREASON}`")
             else:
                 await mention.reply(str(choice(AFKSTR)))
@@ -177,7 +177,7 @@ async def mention_afk(mention):
         else:
             if USERS[mention.sender_id] % randint(2, 4) == 0:
                 if AFKREASON:
-                    await mention.reply(f"I'm still AFK since {afk_since}.\
+                    await mention.reply(f"**Heya!**\n__I am currently unavailable.__\n(Since **{afk_since}**).\n\nWhen will I be back? ~~Soon~~\n __Whenever I feel like it__**( ಠ ʖ̯ ಠ)** \
                             \nReason: `{AFKREASON}`")
                 else:
                     await mention.reply(str(choice(AFKSTR)))
