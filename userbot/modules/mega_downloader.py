@@ -31,7 +31,7 @@ from asyncio import create_subprocess_shell as asyncSubprocess
 from asyncio.subprocess import PIPE as asyncPIPE
 from pySmartDL import SmartDL
 from urllib.error import HTTPError
-from userbot import CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
+from userbot import bot, CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import register
 from userbot.utils import humanbytes, time_formatter
 
@@ -157,7 +157,8 @@ async def mega_downloader(megadl):
             await megadl.edit(f"`{str(e)}`")
             return None
         else:
-            await megadl.edit(
+            await bot.send_message(
+                megadl.chat_id,
                 f"`{file_name}`\n\n"
                 f"Successfully downloaded in: '`{file_path}`'.\n"
                 f"Download took: {time_formatter(download_time)}.")
