@@ -1,16 +1,13 @@
 # Copyright (C) 2020 Adek Maulana.
 # All rights reserved.
-"""
-   Heroku manager for your userbot
-"""
-import codecs
-import math
-import os
-import aiohttp
+
 import heroku3
+import aiohttp
+import math
+import codecs
+import os
 import requests
 
-from userbot.events import register
 from userbot import (
     CMD_HELP,
     HEROKU_APP_NAME,
@@ -19,6 +16,7 @@ from userbot import (
     BOTLOG_CHATID
 )
 
+from userbot.events import register
 
 heroku_api = "https://api.heroku.com"
 if HEROKU_APP_NAME is not None and HEROKU_API_KEY is not None:
@@ -29,13 +27,8 @@ else:
     app = None
 
 
-"""
-   ConfigVars setting, get current var, set var or delete var...
-"""
-
-
 @register(outgoing=True,
-          pattern=r"^\.(get|del) var(?: |$)(\w*)")
+          pattern=r"^.(get|del) var(?: |$)(\w*)")
 async def variable(var):
     exe = var.pattern_match.group(1)
     if app is None:
@@ -62,8 +55,8 @@ async def variable(var):
                 return True
         else:
             configvars = heroku_var.to_dict()
-            msg = ''
             if BOTLOG:
+                msg = ''
                 for item in configvars:
                     msg += f"`{item}` = `{configvars[item]}`\n"
                 await var.client.send_message(
@@ -96,7 +89,7 @@ async def variable(var):
             return True
 
 
-@register(outgoing=True, pattern=r'^\.set var (\w*) ([\s\S]*)')
+@register(outgoing=True, pattern=r'^.set var (\w*) ([\s\S]*)')
 async def set_var(var):
     await var.edit("`Setting information...`")
     variable = var.pattern_match.group(1)
@@ -120,30 +113,25 @@ async def set_var(var):
     heroku_var[variable] = value
 
 
-"""
-    Check account quota, remaining quota, used quota, used app quota
-"""
-
-
-@register(outgoing=True, pattern=r"^\.usage(?: |$)")
+@register(outgoing=True, pattern=r"^.usage(?: |$)")
 async def dyno_usage(dyno):
     """
         Get your account Dyno Usage
     """
     await dyno.edit("`Getting Information...`")
-    useragent = (
-        'Mozilla/5.0 (Linux; Android 10; SM-G975F) '
-        'AppleWebKit/537.36 (KHTML, like Gecko) '
-        'Chrome/81.0.4044.117 Mobile Safari/537.36'
-    )
     user_id = Heroku.account().id
-    headers = {
-        'User-Agent': useragent,
-        'Authorization': f'Bearer {HEROKU_API_KEY}',
-        'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
-    }
     path = "/accounts/" + user_id + "/actions/get-quota"
     async with aiohttp.ClientSession() as session:
+        useragent = (
+            'Mozilla/5.0 (Linux; Android 10; SM-G975F) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/81.0.4044.117 Mobile Safari/537.36'
+        )
+        headers = {
+            'User-Agent': useragent,
+            'Authorization': f'Bearer {HEROKU_API_KEY}',
+            'Accept': 'application/vnd.heroku+json; version=3.account-quotas',
+        }
         async with session.get(heroku_api + path, headers=headers) as r:
             if r.status != 200:
                 await dyno.client.send_message(
@@ -157,14 +145,12 @@ async def dyno_usage(dyno):
             quota = result['account_quota']
             quota_used = result['quota_used']
 
-            """ - User Quota Limit and Used - """
             remaining_quota = quota - quota_used
             percentage = math.floor(remaining_quota / quota * 100)
             minutes_remaining = remaining_quota / 60
             hours = math.floor(minutes_remaining / 60)
             minutes = math.floor(minutes_remaining % 60)
 
-            """ - User App Used Quota - """
             Apps = result['apps']
             for apps in Apps:
                 if apps.get('app_uuid') == app.id:
@@ -209,7 +195,7 @@ async def _(dyno):
     key = (requests.post("https://nekobin.com/api/documents",
                          json={"content": data}) .json() .get("result") .get("key"))
     url = f"https://nekobin.com/raw/{key}"
-    await dyno.edit(f"`Here the heroku logs: `\n\nPasted to: [Nekobin]({url})")
+    await dyno.edit(f"`Here the heroku logs:`\n\nPasted to: [Nekobin]({url})")
     return os.remove("logs.txt")
 
 

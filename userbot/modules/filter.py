@@ -4,9 +4,9 @@
 # you may not use this file except in compliance with the License.
 #
 """ Userbot module for filter commands """
-
 from asyncio import sleep
-from re import search, IGNORECASE, escape
+from re import IGNORECASE, escape, search
+
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
 from userbot.events import register
 
@@ -26,20 +26,22 @@ async def filter_incoming_handler(handler):
             if not filters:
                 return
             for trigger in filters:
-                pattern = (
-                    r"( |^|[^\w])" + escape(trigger.keyword) + r"( |$|[^\w])")
+                pattern = r"( |^|[^\w])" + \
+                    escape(trigger.keyword) + r"( |$|[^\w])"
                 pro = search(pattern, name, flags=IGNORECASE)
-                if pro and trigger.f_mesg_id:
-                    msg_o = await handler.client.get_messages(
-                        entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id))
-                    await handler.reply(msg_o.message, file=msg_o.media)
-                elif pro and trigger.reply:
-                    await handler.reply(trigger.reply)
+                if pro:
+                    if trigger.f_mesg_id:
+                        msg_o = await handler.client.get_messages(
+                            entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
+                        )
+                        await handler.reply(msg_o.message, file=msg_o.media)
+                    elif trigger.reply:
+                        await handler.reply(trigger.reply)
     except AttributeError:
         pass
 
 
-@register(outgoing=True, pattern=r"^.filter (.*)")
+@register(outgoing=True, pattern=r"^\.filter (.*)")
 async def add_new_filter(new_handler):
     """ For .filter command, allows adding new filters in a chat """
     try:
@@ -59,14 +61,16 @@ async def add_new_filter(new_handler):
     if msg and msg.media and not string:
         if BOTLOG_CHATID:
             await new_handler.client.send_message(
-                BOTLOG_CHATID, f"#FILTER\nCHAT ID: {new_handler.chat_id}\nTRIGGER: {keyword}"
-                "\n\nThe following message is saved as the filter's reply data for the chat, please do NOT delete it !!"
+                BOTLOG_CHATID,
+                f"#FILTER\nCHAT ID: {new_handler.chat_id}\nTRIGGER: {keyword}"
+                "\n\nThe following message is saved as the filter's reply data for the chat, please do NOT delete it !!",
             )
             msg_o = await new_handler.client.forward_messages(
                 entity=BOTLOG_CHATID,
                 messages=msg,
                 from_peer=new_handler.chat_id,
-                silent=True)
+                silent=True,
+            )
             msg_id = msg_o.id
         else:
             return await new_handler.edit(
@@ -77,12 +81,12 @@ async def add_new_filter(new_handler):
         string = rep_msg.text
     success = "`Filter`  **{}**  `{} successfully`."
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
-        await new_handler.edit(success.format(keyword, 'added'))
+        await new_handler.edit(success.format(keyword, "added"))
     else:
-        await new_handler.edit(success.format(keyword, 'updated'))
+        await new_handler.edit(success.format(keyword, "updated"))
 
 
-@register(outgoing=True, pattern=r"^.stop (.*)")
+@register(outgoing=True, pattern=r"^\.stop (.*)")
 async def remove_a_filter(r_handler):
     """ For .stop command, allows you to remove a filter from a chat. """
     try:
@@ -94,14 +98,14 @@ async def remove_a_filter(r_handler):
         await r_handler.edit("`Filter`  **{}**  `doesn't exist`.".format(filt))
     else:
         await r_handler.edit(
-            "`Filter`  **{}**  `was deleted successfully`.".format(filt))
+            "`Filter`  **{}**  `was deleted successfully`.".format(filt)
+        )
 
 
-@register(outgoing=True, pattern="^.rmbotfilters (.*)")
+@register(outgoing=True, pattern=r"^\.rmbotfilters (.*)")
 async def kick_marie_filter(event):
     """ For .rmfilters command, allows you to kick all \
         Marie(or her clones) filters from a chat. """
-    event.text[0]
     bot_type = event.pattern_match.group(1).lower()
     if bot_type not in ["marie", "rose"]:
         return await event.edit("`That bot is not yet supported!`")
@@ -113,17 +117,17 @@ async def kick_marie_filter(event):
         if bot_type.lower() == "marie":
             await event.reply("/stop %s" % (i.strip()))
         if bot_type.lower() == "rose":
-            i = i.replace('`', '')
+            i = i.replace("`", "")
             await event.reply("/stop %s" % (i.strip()))
         await sleep(0.3)
-    await event.respond(
-        "```Successfully purged bots filters yaay!```\n Gimme cookies!")
+    await event.respond("```Successfully purged bots filters yaay!```\n Gimme cookies!")
     if BOTLOG:
         await event.client.send_message(
-            BOTLOG_CHATID, "I cleaned all filters at " + str(event.chat_id))
+            BOTLOG_CHATID, "I cleaned all filters at " + str(event.chat_id)
+        )
 
 
-@register(outgoing=True, pattern="^.filters$")
+@register(outgoing=True, pattern=r"^\.filters$")
 async def filters_active(event):
     """ For .filters command, lists all of the active filters in a chat. """
     try:
@@ -135,23 +139,21 @@ async def filters_active(event):
     for filt in filters:
         if transact == "`There are no filters in this chat.`":
             transact = "Active filters in this chat:\n"
-            transact += "`{}`\n".format(filt.keyword)
-        else:
-            transact += "`{}`\n".format(filt.keyword)
-
+        transact += "`{}`\n".format(filt.keyword)
     await event.edit(transact)
 
 
-CMD_HELP.update({
-    "filter":
-    ">`.filters`"
-    "\nUsage: Lists all active userbot filters in a chat."
-    "\n\n>`.filter <keyword> <reply text>` or reply to a message with >`.filter <keyword>`"
-    "\nUsage: Saves the replied message as a reply to the 'keyword'."
-    "\nThe bot will reply to the message whenever 'keyword' is mentioned."
-    "\nWorks with everything from files to stickers."
-    "\n\n>`.stop <filter>`"
-    "\nUsage: Stops the specified filter."
-    "\n\n>`.rmbotfilters <marie/rose>`"
-    "\nUsage: Removes all filters of admin bots (Currently supported: Marie, Rose and their clones.) in the chat."
-})
+CMD_HELP.update(
+    {
+        "filter": ">`.filters`"
+        "\nUsage: Lists all active userbot filters in a chat."
+        "\n\n>`.filter <keyword> <reply text>` or reply to a message with >`.filter <keyword>`"
+        "\nUsage: Saves the replied message as a reply to the 'keyword'."
+        "\nThe bot will reply to the message whenever 'keyword' is mentioned."
+        "\nWorks with everything from files to stickers."
+        "\n\n>`.stop <filter>`"
+        "\nUsage: Stops the specified filter."
+        "\n\n>`.rmbotfilters <marie/rose>`"
+        "\nUsage: Removes all filters of admin bots (Currently supported: Marie, Rose and their clones.) in the chat."
+    }
+)

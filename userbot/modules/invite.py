@@ -1,4 +1,3 @@
-from asyncio import sleep
 from telethon import functions
 from userbot import CMD_HELP
 from userbot.events import register
@@ -24,9 +23,6 @@ async def _(event):
                 except Exception as e:
                     await event.edit(str(e))
                     return
-            await event.edit("`Invited Unsuccessfully`")
-            await sleep(3)
-            await event.delete()
         else:
             # https://lonamiwebs.github.io/Telethon/methods/channels/invite_to_channel.html
             for user_id in to_add_users.split(" "):
@@ -38,12 +34,11 @@ async def _(event):
                 except Exception as e:
                     await event.edit(str(e))
                     return
-            await event.edit("`Invited Successfully`")
-            await sleep(3)
-            await event.delete()
+
+        await event.edit("`Invited Successfully`")
 
 CMD_HELP.update({
     'invite':
-    '.invite <username> \
-        \nUsage: Invite some user or bots if u want.'
+    "\n\n`>.invite <username> [or id user]`"
+    "\nUsage: Invite user or bots if u want."
 })

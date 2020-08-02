@@ -90,7 +90,7 @@ async def repeat(rep):
 
     replyText = toBeRepeated + "\n"
 
-    for i in range(0, replyCount - 1):
+    for _ in range(replyCount - 1):
         replyText += toBeRepeated + "\n"
 
     await rep.edit(replyText)
@@ -100,7 +100,7 @@ async def repeat(rep):
 async def repo_is_here(wannasee):
     """ For .repo command, just returns the repo URL. """
     await wannasee.edit(
-        "[Click Here](https://github.com/adekmaulana/ProjectBish) to see ProjectBish Official Repo.\n[Click Here](https://github.com/irfanfebrian13/ProjectIFS) To see My github pages"
+        "[Click Here](https://github.com/irfanfebrian13/ProjectIFS) To see My github pages"
     )
 
 

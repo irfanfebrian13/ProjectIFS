@@ -36,6 +36,7 @@ KANGING_STR = [
     "Curry dolo boss",
     "Swiper jangan mencurry",
     "sticker lu gw tambah ke pack gw ya hihi...",
+    "Bagus nih sticker gw tambah ke pack ya hehe",
 ]
 
 
@@ -256,7 +257,7 @@ async def resize_photo(photo):
     if (image.width and image.height) < 512:
         size1 = image.width
         size2 = image.height
-        if image.width > image.height:
+        if size1 > size2:
             scale = 512 / size1
             size1new = 512
             size2new = size2 * scale
@@ -269,6 +270,7 @@ async def resize_photo(photo):
         sizenew = (size1new, size2new)
         image = image.resize(sizenew)
     else:
+        maxsize = (512, 512)
         image.thumbnail(maxsize)
 
     return image

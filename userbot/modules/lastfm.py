@@ -3,26 +3,35 @@
 # Licensed under the Raphielscape Public License, Version 1.c (the "License");
 # you may not use this file except in compliance with the License.
 #
-
 from asyncio import sleep
-from pylast import User, WSError
-from re import sub
-from urllib import parse
 from os import environ
+from re import sub
 from sys import setrecursionlimit
+from urllib import parse
 
+from pylast import User, WSError
 from telethon.errors import AboutTooLongError
+from telethon.errors.rpcerrorlist import FloodWaitError
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.errors.rpcerrorlist import FloodWaitError
 
-from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO,
-                     BIO_PREFIX, lastfm, LASTFM_USERNAME, bot)
+from userbot import (
+    BIO_PREFIX,
+    BOTLOG,
+    BOTLOG_CHATID,
+    CMD_HELP,
+    DEFAULT_BIO,
+    LASTFM_USERNAME,
+    bot,
+    lastfm,
+)
 from userbot.events import register
 
 # =================== CONSTANT ===================
 LFM_BIO_ENABLED = "```last.fm current music to bio is now enabled.```"
-LFM_BIO_DISABLED = "```last.fm current music to bio is now disabled. Bio reverted to default.```"
+LFM_BIO_DISABLED = (
+    "```last.fm current music to bio is now disabled. Bio reverted to default.```"
+)
 LFM_BIO_RUNNING = "```last.fm current music to bio is already running.```"
 LFM_BIO_ERR = "```No option specified.```"
 LFM_LOG_ENABLED = "```last.fm logging to bot log is now enabled.```"
@@ -34,18 +43,14 @@ ARTIST = 0
 SONG = 0
 USER_ID = 0
 
-if BIO_PREFIX:
-    BIOPREFIX = BIO_PREFIX
-else:
-    BIOPREFIX = None
-
+BIOPREFIX = BIO_PREFIX if BIO_PREFIX else None
 LASTFMCHECK = False
 RUNNING = False
 LastLog = False
 # ================================================
 
 
-@register(outgoing=True, pattern="^.lastfm$")
+@register(outgoing=True, pattern=r"^\.lastfm$")
 async def last_fm(lastFM):
     """ For .lastfm command, fetch scrobble data from last.fm. """
     await lastFM.edit("`Processing...`")
@@ -54,22 +59,24 @@ async def last_fm(lastFM):
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
     if playing is not None:
         try:
-            image = User(LASTFM_USERNAME,
-                         lastfm).get_now_playing().get_cover_image()
+            image = User(
+                LASTFM_USERNAME,
+                lastfm).get_now_playing().get_cover_image()
         except IndexError:
             image = None
         tags = await gettags(isNowPlaying=True, playing=playing)
         rectrack = parse.quote(f"{playing}")
-        rectrack = sub("^", "https://open.spotify.com/search/",
-                       rectrack)
+        rectrack = sub("^", "https://open.spotify.com/search/", rectrack)
         if image:
             output = (
                 f"[‎]({image})[{LASTFM_USERNAME}]({username}) __is now listening to:"
                 f"__\n\n• [{playing}]({rectrack})\n`{tags}`")
             preview = True
         else:
-            output = (f"[{LASTFM_USERNAME}]({username}) __is now listening to:"
-                      f"__\n\n• [{playing}]({rectrack})\n`{tags}`")
+            output = (
+                f"[{LASTFM_USERNAME}]({username}) __is now listening to:"
+                f"__\n\n• [{playing}]({rectrack})\n`{tags}`"
+            )
     else:
         recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=3)
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
@@ -79,16 +86,14 @@ async def last_fm(lastFM):
             printable = await artist_and_song(track)
             tags = await gettags(track)
             rectrack = parse.quote(str(printable))
-            rectrack = sub("^",
-                           "https://open.spotify.com/search/",
-                           rectrack)
+            rectrack = sub("^", "https://open.spotify.com/search/", rectrack)
             output += f"• [{printable}]({rectrack})\n"
             if tags:
                 output += f"`{tags}`\n\n"
     if preview is not None:
-        await lastFM.edit(f"{output}", parse_mode='md', link_preview=True)
+        await lastFM.edit(f"{output}", parse_mode="md", link_preview=True)
     else:
-        await lastFM.edit(f"{output}", parse_mode='md')
+        await lastFM.edit(f"{output}", parse_mode="md")
 
 
 async def gettags(track=None, isNowPlaying=None, playing=None):
@@ -102,7 +107,7 @@ async def gettags(track=None, isNowPlaying=None, playing=None):
         arg = track.track
     if not tags:
         tags = arg.artist.get_top_tags()
-    tags = "".join([" #" + t.item.__str__() for t in tags[:5]])
+    tags = "".join(" #" + t.item.__str__() for t in tags[:5])
     tags = sub("^ ", "", tags)
     tags = sub(" ", "_", tags)
     tags = sub("_#", " #", tags)
@@ -142,19 +147,19 @@ async def get_curr_track(lfmbio):
                 try:
                     if BOTLOG and LastLog:
                         await bot.send_message(
-                            BOTLOG_CHATID,
-                            f"Attempted to change bio to\n{lfmbio}")
+                            BOTLOG_CHATID, f"Attempted to change bio to\n{lfmbio}"
+                        )
                     await bot(UpdateProfileRequest(about=lfmbio))
                 except AboutTooLongError:
                     short_bio = f"🎧: {SONG}"
                     await bot(UpdateProfileRequest(about=short_bio))
-            else:
-                if playing is None and user_info.about != DEFAULT_BIO:
-                    await sleep(6)
-                    await bot(UpdateProfileRequest(about=DEFAULT_BIO))
-                    if BOTLOG and LastLog:
-                        await bot.send_message(
-                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}")
+            if playing is None and user_info.about != DEFAULT_BIO:
+                await sleep(6)
+                await bot(UpdateProfileRequest(about=DEFAULT_BIO))
+                if BOTLOG and LastLog:
+                    await bot.send_message(
+                        BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}"
+                    )
         except AttributeError:
             try:
                 if user_info.about != DEFAULT_BIO:
@@ -162,24 +167,22 @@ async def get_curr_track(lfmbio):
                     await bot(UpdateProfileRequest(about=DEFAULT_BIO))
                     if BOTLOG and LastLog:
                         await bot.send_message(
-                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}")
+                            BOTLOG_CHATID, f"Reset bio back to\n{DEFAULT_BIO}"
+                        )
             except FloodWaitError as err:
                 if BOTLOG and LastLog:
-                    await bot.send_message(BOTLOG_CHATID,
-                                           f"Error changing bio:\n{err}")
+                    await bot.send_message(BOTLOG_CHATID, f"Error changing bio:\n{err}")
         except FloodWaitError as err:
             if BOTLOG and LastLog:
-                await bot.send_message(BOTLOG_CHATID,
-                                       f"Error changing bio:\n{err}")
+                await bot.send_message(BOTLOG_CHATID, f"Error changing bio:\n{err}")
         except WSError as err:
             if BOTLOG and LastLog:
-                await bot.send_message(BOTLOG_CHATID,
-                                       f"Error changing bio:\n{err}")
+                await bot.send_message(BOTLOG_CHATID, f"Error changing bio:\n{err}")
         await sleep(2)
     RUNNING = False
 
 
-@register(outgoing=True, pattern=r"^.lastbio (on|off)")
+@register(outgoing=True, pattern=r"^\.lastbio (on|off)")
 async def lastbio(lfmbio):
     arg = lfmbio.pattern_match.group(1).lower()
     global LASTFMCHECK
@@ -203,7 +206,7 @@ async def lastbio(lfmbio):
         await lfmbio.edit(LFM_BIO_ERR)
 
 
-@register(outgoing=True, pattern=r"^.lastlog (on|off)")
+@register(outgoing=True, pattern=r"^\.lastlog (on|off)")
 async def lastlog(lstlog):
     arg = lstlog.pattern_match.group(1).lower()
     global LastLog
