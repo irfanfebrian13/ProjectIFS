@@ -103,6 +103,36 @@ async def tweets(text1, text2):
     img = Image.open("gpx.png").convert("RGB")
     img.save("gpx.webp", "webp")
     return "gpx.webp"
+    
+
+async def selenagomez(text):
+    r = requests.get(
+        f"https://nekobot.xyz/api/imagegen?type=tweet&text={text}&username=SelenaGomez"
+    ).json()
+    project = r.get("message")
+    ifs = url(project)
+    if not ifs:
+        return "check syntax once more"
+    with open("gpx.png", "wb") as f:
+        f.write(requests.get(project).content)
+    img = Image.open("gpx.png").convert("RGB")
+    img.save("gpx.webp", "webp")
+    return "gpx.webp"
+
+
+async def cristiano(text):
+    r = requests.get(
+        f"https://nekobot.xyz/api/imagegen?type=tweet&text={text}&username=CristianoRonaldo"
+    ).json()
+    project = r.get("message")
+    ifs = url(project)
+    if not ifs:
+        return "check syntax once more"
+    with open("gpx.png", "wb") as f:
+        f.write(requests.get(project).content)
+    img = Image.open("gpx.png").convert("RGB")
+    img.save("gpx.webp", "webp")
+    return "gpx.webp"
 
 
 async def purge():
@@ -111,6 +141,48 @@ async def purge():
         os.remove("gpx.webp")
     except OSError:
         pass
+
+
+@register(outgoing=True, pattern=r"^\.cris(?: |$)(.*)")
+async def cris(event):
+    text = event.pattern_match.group(1)
+    text = re.sub("&", "", text)
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    if not text:
+        if event.is_reply and not reply_to_id.media:
+            text = reply_to_id.message
+        else:
+            await event.edit("`Send you text to @Cristiano so he can tweet.`")
+            return
+    await event.edit("`Requesting cristian ronaldo to tweet...`")
+    text = deEmojify(text)
+    img = await cristiano(text)
+    await event.client.send_file(event.chat_id, img, reply_to=reply_to_id)
+    await event.delete()
+    await purge()
+    
+
+@register(outgoing=True, pattern=r"^\.selenag(?: |$)(.*)")
+async def selenag(event):
+    text = event.pattern_match.group(1)
+    text = re.sub("&", "", text)
+    reply_to_id = event.message
+    if event.reply_to_msg_id:
+        reply_to_id = await event.get_reply_message()
+    if not text:
+        if event.is_reply and not reply_to_id.media:
+            text = reply_to_id.message
+        else:
+            await event.edit("`Send you text to @SelenaGomez so he can tweet.`")
+            return
+    await event.edit("`Requesting selenagomez to tweet...`")
+    text = deEmojify(text)
+    img = await selenagomez(text)
+    await event.client.send_file(event.chat_id, img, reply_to=reply_to_id)
+    await event.delete()
+    await purge()
 
 
 @register(outgoing=True, pattern=r"^\.trump(?: |$)(.*)")
@@ -237,6 +309,10 @@ CMD_HELP.update(
         ">`.cmm` <text>"
         "\nUsage: Create banner for Change My Mind.\n\n"
         ">`.kanna` <text>"
-        "\nUsage: Kanna is writing your text."
+        "\nUsage: Kanna is writing your text.\n\n"
+        ">`.selenag` <tweet>"
+        "\nUsage: Create tweet for `@SelenaGomez`.\n\n"
+        ">`.cris` <tweet>"
+        "\nUsage: Create tweet for `@Cristiano`."
     }
 )
