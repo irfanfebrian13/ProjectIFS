@@ -57,10 +57,11 @@
 * [Setup Google Drive](https://telegra.ph/How-To-Setup-Google-Drive-04-03)
 * [Setup LastFM](https://telegra.ph/How-to-set-up-LastFM-module-for-Paperplane-userbot-11-02)
 
+### or Run on your terminal
+```
+wget https://raw.githubusercontent.com/irfanfebrian13/ProjectIFS/master/terminal_getstring.sh && bash terminal_getstring.sh
+```
+
 ## Groups and Support
 
 Join [Userbotindo Support Group](https://t.me/userbotindo) for discussion, bug reporting, and help.
-
-
-
-
