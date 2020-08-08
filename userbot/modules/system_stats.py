@@ -208,8 +208,8 @@ async def amireallyalive(alive):
     uptime = await get_readable_time((time.time() - StartTime))
     logo = ALIVE_LOGO
     output = (f"╔─━━━━━━━━**INFO**━━━━━━━─╗\n"
-              f"  -❏**•ProjectIFS Is Running•**❏- \n"
-              f"            -❏`{uptime}`❏-\n"
+              f"    -❏**•ProjectIFS Is Running•**❏- \n"
+              f"              -❏`{uptime}`❏-\n"
               f"╚─━━━━━━━━**INFO**━━━━━━━─╝\n\n"
               f"┏━━━━━━━━━━━━━━━━━━━━━━━━\n"
               f"┣[ 🗣️ `User        :` {DEFAULTUSER}\n"
@@ -218,9 +218,16 @@ async def amireallyalive(alive):
               f"┣[ 🔧`Telethon    : v{version.__version__}`\n"
               f"┗━━━━━━━━━━━━━━━━━━━━━━━━\n"
               f"`❏All modules loaded :`{len(modules)}")
-    await bot.send_file(alive.chat_id, logo, caption=output)
-    await alive.delete()
-
+    if ALIVE_LOGO:
+        try:
+            logo = ALIVE_LOGO
+            await bot.send_file(alive.chat_id, logo, caption=output)
+            await alive.delete()
+        except BaseException:
+            await alive.edit(output + "\n\n *`The provided logo is invalid."
+                             "\nMake sure the link is directed to the logo picture`")
+    else:
+        await alive.edit(output)
 
 @register(outgoing=True, pattern=r"^\.aliveu")
 async def amireallyaliveuser(username):
