@@ -674,7 +674,7 @@ async def upload(gdrive, service, file_path, file_name, mimeType):
                 "`[FILE - UPLOAD]`\n\n"
                 f"`{file_name}`\n"
                 f"`Status`\n{prog_str}\n"
-                f"`{humanbytes(uploaded)} of {humanbytes(file_size)} "
+                f"`{humanbytes(uploaded)} of {humanbytes(file_size)}\n"
                 f"@ {humanbytes(speed)}`\n"
                 f"`ETA` -> {time_formatter(eta)}"
             )
