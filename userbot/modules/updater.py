@@ -137,7 +137,7 @@ async def update(event, repo, ups_rem, ac_br):
         repo.git.reset("--hard", "FETCH_HEAD")
     await update_requirements()
     await event.edit(
-        "`Successfully Updated!\n" "Bot is restarting... Wait for a second!`"
+        "`Successfully Updated!\n" "ProjectIFS is restarting... Wait for a second!`"
     )
     # Spin a new instance of bot
     args = [sys.executable, "-m", "userbot"]
@@ -199,7 +199,7 @@ async def upstream(event):
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
     """ - Special case for deploy - """
     if conf == "deploy":
-        await event.edit("`Deploying userbot, please wait....`")
+        await event.edit("`Deploying ProjectIFS, please wait....`")
         await deploy(event, repo, ups_rem, ac_br, txt)
         return
 
@@ -220,7 +220,7 @@ async def upstream(event):
             "`Force-Syncing to latest stable userbot code, please wait...`"
         )
     if conf == "now":
-        await event.edit("`Updating userbot, please wait....`")
+        await event.edit("`Updating ProjectIFS, please wait....`")
         await update(event, repo, ups_rem, ac_br)
     return
 
