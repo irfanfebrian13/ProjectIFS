@@ -171,7 +171,7 @@ G_DRIVE_FOLDER_ID = os.environ.get("G_DRIVE_FOLDER_ID", None)
 
 # Download directory location
 TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
-                                         "./downloads")
+                                         "/ProjectIFS/.bin")
 
 # Zipfile module
 ZIP_DOWNLOAD_DIRECTORY = os.environ.get("ZIP_DOWNLOAD_DIRECTORY",

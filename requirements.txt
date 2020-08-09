@@ -16,20 +16,20 @@ gitpython
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
-googletrans>=2.4.0
-google_images_download>=2.7.1
-gTTS>=2.0.1
-gTTS-token>=1.1.3
-hachoir>=3.0a5
+googletrans
+google_images_download
+gTTS
+gTTS-token
+hachoir
 # heroku
-heroku3>=3.4.0
+heroku3
 html_telegraph_poster
 httplib2
 humanize
 jikanpy
 lxml
 oauth2client
-Pillow>=6.0.0
+Pillow
 psutil
 pendulum
 psycopg2
@@ -49,7 +49,7 @@ youtube_search
 pytz
 qrcode
 requests
-search-engine-parser>=0.6.1
+search-engine-parser
 speedtest-cli
 sqlalchemy
 telethon==1.15.0
