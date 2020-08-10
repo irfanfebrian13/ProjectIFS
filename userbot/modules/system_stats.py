@@ -229,6 +229,7 @@ async def amireallyalive(alive):
     else:
         await alive.edit(output)
 
+
 @register(outgoing=True, pattern=r"^\.aliveu")
 async def amireallyaliveuser(username):
     """ For .aliveu command, change the username in the .alive command. """
