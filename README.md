@@ -15,7 +15,7 @@
     <a href="https://hub.docker.com/r/irfanfebrian13/projectifs/tags"> <img src="https://img.shields.io/docker/v/irfanfebrian13/projectifs/latest?label=docker%20version&logo=docker&style=for-the-badge" /></a>
     <a href="https://pypi.org/project/Telethon/"> <img src="https://img.shields.io/pypi/v/telethon?label=telethon&logo=pypi&logoColor=white&style=for-the-badge" /></a><br>
     <a href="https://t.me/userbotindo"> <img src="https://img.shields.io/badge/telegram-Support_Group-blue?style=social&logo=telegram" alt="support" /></a>
-    <img src="https://telegra.ph/file/bad7aaf671cc46bca7f76.jpg" alt="Image" width="800" height="600" />
+    <img src="https://telegra.ph/file/20d2a8c12e79db834074e.jpg" alt="Image" width="800" height="600" />
     <h2 align="center">Cintai Produk Lokal :) 🇮🇩</h2>  
 </p>
 
