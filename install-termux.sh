@@ -19,6 +19,7 @@ pkg update -y
 info "Installing system packages needed by ${PROJECT_NAME}..."
 pkg install -y \
   python \
+  python-psutil \
   git \
   clang \
   make \
@@ -37,7 +38,7 @@ info "Upgrading pip/setuptools/wheel..."
 python -m pip install --upgrade pip setuptools wheel
 
 info "Installing Python requirements. This can take several minutes on first run..."
-python -m pip install -r requirements.txt
+python -m pip install --no-deps -r requirements.txt
 
 if [ ! -f config.env ]; then
   info "Creating config.env from sample_config.env..."
