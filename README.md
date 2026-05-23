@@ -67,6 +67,56 @@ wget https://raw.githubusercontent.com/irfanfebrian13/ProjectIFS/master/terminal
 
 Join [Userbotindo Support Group](https://t.me/userbotindo) for discussion, bug reporting, and help.
 
+## One-click Termux setup
+
+For Android/Termux, ProjectIFS includes helper scripts so setup is not fully manual.
+
+### First setup
+
+```bash
+git clone https://github.com/irfanfebrian13/ProjectIFS.git
+cd ProjectIFS
+bash install-termux.sh
+```
+
+Then edit your secrets:
+
+```bash
+nano config.env
+```
+
+Required values:
+
+```env
+API_KEY=
+API_HASH=
+STRING_SESSION=
+```
+
+If you do not have `STRING_SESSION` yet:
+
+```bash
+bash session-termux.sh
+```
+
+### Start / stop
+
+```bash
+bash start-termux.sh
+```
+
+```bash
+bash stop-termux.sh
+```
+
+Log:
+
+```bash
+tail -f projectifs.log
+```
+
+Never commit or share `config.env`, `STRING_SESSION`, `API_HASH`, or Telegram login codes.
+
 ## Modern Docker deployment
 
 ProjectIFS now includes a self-contained Docker setup inspired by the cleaner deployment pattern from `brianxcaligo`. The image is built from the local repository contents instead of cloning GitHub during build.
