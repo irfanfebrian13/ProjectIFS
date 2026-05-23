@@ -11,13 +11,24 @@ import time
 
 from sys import version_info
 from logging import basicConfig, getLogger, INFO, DEBUG
-from distutils.util import strtobool as sb
 from math import ceil
 
 from pylast import LastFMNetwork, md5
 from pySmartDL import SmartDL
 from dotenv import load_dotenv
 from requests import get
+
+
+def sb(value):
+    """Return distutils-compatible boolean parsing without importing distutils."""
+    if isinstance(value, bool):
+        return value
+    value = str(value).strip().lower()
+    if value in {"y", "yes", "t", "true", "on", "1"}:
+        return True
+    if value in {"n", "no", "f", "false", "off", "0"}:
+        return False
+    raise ValueError(f"invalid truth value {value!r}")
 from telethon.sync import TelegramClient, custom, events
 from telethon.sessions import StringSession
 
@@ -64,7 +75,7 @@ API_HASH = os.environ.get("API_HASH", None)
 STRING_SESSION = os.environ.get("STRING_SESSION", None)
 
 # Logging channel/group ID configuration.
-BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID", None))
+BOTLOG_CHATID = int(os.environ.get("BOTLOG_CHATID") or 0)
 
 # Userbot logging feature switch.
 BOTLOG = sb(os.environ.get("BOTLOG", "True"))
@@ -136,7 +147,8 @@ TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
 
 # Set default timezone
 TZ = os.environ.get("TZ", "Asia/Jakarta")
-time.tzset()
+if hasattr(time, "tzset"):
+    time.tzset()
 
 # Clean Welcome
 CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
@@ -149,7 +161,7 @@ LASTFM_API = os.environ.get("LASTFM_API", None)
 LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
 LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
 LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
-LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
+LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN) if LASTFM_PASSWORD_PLAIN else None
 if LASTFM_API and LASTFM_SECRET and LASTFM_USERNAME and LASTFM_PASS:
     lastfm = LastFMNetwork(api_key=LASTFM_API,
                            api_secret=LASTFM_SECRET,
@@ -216,9 +228,23 @@ binaries = {
 }
 
 for binary, path in binaries.items():
-    downloader = SmartDL(binary, path, progress_bar=False)
-    downloader.start()
-    os.chmod(path, 0o755)
+    if os.path.exists(path):
+        continue
+    try:
+        downloader = SmartDL(binary, path, progress_bar=False)
+        downloader.start()
+        os.chmod(path, 0o755)
+    except Exception as exc:  # pragma: no cover - optional runtime helper
+        LOGS.warning("Could not download optional helper binary %s: %s", path, exc)
+
+missing_required = [name for name, value in {
+    "API_KEY": API_KEY,
+    "API_HASH": API_HASH,
+}.items() if not value]
+
+if missing_required:
+    LOGS.error("Missing required environment variables: %s", ", ".join(missing_required))
+    quit(1)
 
 # 'bot' variable
 if STRING_SESSION:

@@ -1,0 +1,9 @@
+services:
+  projectifs:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - config.env
+    volumes:
+      - ./downloads:/app/downloads
+      - ./zips:/app/zips

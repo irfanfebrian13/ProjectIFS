@@ -5,6 +5,7 @@
 #
 """ Userbot start point """
 
+import os
 from importlib import import_module
 from sys import argv
 
@@ -23,8 +24,29 @@ except PhoneNumberInvalidError:
     print(INVALID_PH)
     exit(1)
 
+_disabled_modules = {
+    module.strip()
+    for module in os.environ.get("DISABLED_MODULES", "").split(",")
+    if module.strip()
+}
+loaded_modules = []
+failed_modules = {}
+
 for module_name in ALL_MODULES:
-    imported_module = import_module("userbot.modules." + module_name)
+    if module_name in _disabled_modules:
+        LOGS.info("Skipping disabled module: %s", module_name)
+        continue
+    try:
+        import_module("userbot.modules." + module_name)
+        loaded_modules.append(module_name)
+    except Exception as exc:  # pragma: no cover - defensive runtime isolation
+        failed_modules[module_name] = str(exc)
+        LOGS.exception("Failed to load module %s", module_name)
+
+LOGS.info("Loaded %s modules", len(loaded_modules))
+if failed_modules:
+    LOGS.warning("Failed to load %s modules: %s",
+                 len(failed_modules), ", ".join(sorted(failed_modules)))
 
 LOGS.info(
     "You are running ProjectIFS [v3] Userbot Go to Telegram and Type .alive or .on")

@@ -66,3 +66,51 @@ wget https://raw.githubusercontent.com/irfanfebrian13/ProjectIFS/master/terminal
 ## Groups and Support
 
 Join [Userbotindo Support Group](https://t.me/userbotindo) for discussion, bug reporting, and help.
+
+## Modern Docker deployment
+
+ProjectIFS now includes a self-contained Docker setup inspired by the cleaner deployment pattern from `brianxcaligo`. The image is built from the local repository contents instead of cloning GitHub during build.
+
+### Required environment variables
+
+Copy `sample_config.env` to `config.env` and fill at least:
+
+```env
+API_KEY=
+API_HASH=
+STRING_SESSION=
+```
+
+Optional logging defaults are safe for first deploy:
+
+```env
+BOTLOG=False
+BOTLOG_CHATID=0
+LOGSPAMMER=False
+```
+
+### Docker Compose
+
+```bash
+cp sample_config.env config.env
+# edit config.env
+docker compose up --build -d
+```
+
+### Docker
+
+```bash
+docker build -t projectifs .
+docker run --env-file config.env --restart unless-stopped projectifs
+```
+
+### Module compatibility
+
+This is a legacy userbot with many optional modules. Startup now supports disabling modules with:
+
+```env
+DISABLED_MODULES=deezload,lyrics,google_photos
+```
+
+If an optional module fails to import because an external package/API is obsolete, the bot logs the failure and continues loading other modules.
+

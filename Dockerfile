@@ -1,12 +1,35 @@
-# Using Ubuntu 20.10
-FROM irfanfebrian13/projectifs:latest
+FROM python:3.11-slim
 
-# Clone Repo
-RUN git clone -b master https://github.com/irfanfebrian13/ProjectIFS /home/projectifs/
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    TZ=Asia/Jakarta
 
-# Set Working Directory
-RUN mkdir /home/projectifs/bin/
-WORKDIR /home/projectifs/
+WORKDIR /app
 
-# Finalization
-CMD ["python3","-m","userbot"]
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    curl \
+    ffmpeg \
+    aria2 \
+    neofetch \
+    gcc \
+    g++ \
+    make \
+    libffi-dev \
+    libssl-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN python -m pip install --upgrade pip setuptools wheel \
+    && pip install -r requirements.txt
+
+COPY . .
+
+RUN mkdir -p /app/bin /app/downloads /app/zips
+
+CMD ["python3", "-m", "userbot"]

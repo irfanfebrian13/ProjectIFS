@@ -1,0 +1,11 @@
+.git
+__pycache__/
+*.py[cod]
+.env
+config.env
+*.session
+*.session-journal
+downloads/
+zips/
+.venv/
+venv/
