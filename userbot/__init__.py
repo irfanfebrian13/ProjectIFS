@@ -112,7 +112,7 @@ UPSTREAM_REPO_BRANCH = os.environ.get(
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
 # SQL Database URI
-DB_URI = os.environ.get("DATABASE_URL", None)
+DB_URI = os.environ.get("DATABASE_URL") or "sqlite:///projectifs.db"
 
 # OCR API key
 OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
