@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ffmpeg \
     aria2 \
+    neofetch \
     gcc \
     g++ \
     make \
