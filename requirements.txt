@@ -28,6 +28,8 @@ psycopg2-binary>=2.9,<3; platform_system != "Android"
 pybase64>=1.3,<2
 pyaes>=1.6,<2
 rsa>=4.9,<5
+six>=1.16,<2
+pyasn1-modules>=0.4,<1
 pylast>=5.3,<6
 pySmartDL>=1.3,<2
 python-barcode>=0.15,<1

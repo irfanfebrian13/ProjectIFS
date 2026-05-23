@@ -13,21 +13,45 @@ from telethon.sessions import StringSession
 PY
 then
   info "Installing minimal Telethon session dependencies..."
-  python -m pip install --upgrade Telethon pyaes rsa
+  python -m pip install --upgrade Telethon pyaes rsa six pyasn1-modules
 fi
 
+printf 'ProjectIFS STRING_SESSION generator\n'
+printf 'Jangan share hasil STRING_SESSION ke siapa pun.\n\n'
+
+API_ID_VALUE="${API_KEY:-}"
+API_HASH_VALUE="${API_HASH:-}"
+
+if [ -z "$API_ID_VALUE" ] && [ -f config.env ]; then
+  API_ID_VALUE="$(grep -E '^API_KEY=' config.env | head -n1 | cut -d= -f2- || true)"
+fi
+if [ -z "$API_HASH_VALUE" ] && [ -f config.env ]; then
+  API_HASH_VALUE="$(grep -E '^API_HASH=' config.env | head -n1 | cut -d= -f2- || true)"
+fi
+
+if [ -z "$API_ID_VALUE" ]; then
+  printf 'API_KEY/API_ID dari my.telegram.org: ' > /dev/tty
+  IFS= read -r API_ID_VALUE < /dev/tty
+fi
+
+if [ -z "$API_HASH_VALUE" ]; then
+  printf 'API_HASH dari my.telegram.org: ' > /dev/tty
+  IFS= read -r API_HASH_VALUE < /dev/tty
+fi
+
+export API_ID_VALUE API_HASH_VALUE
+
 python - <<'PY'
+import os
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 
-print("ProjectIFS STRING_SESSION generator")
-print("Jangan share hasil STRING_SESSION ke siapa pun.\n")
-api_id = int(input("API_KEY/API_ID dari my.telegram.org: ").strip())
-api_hash = input("API_HASH dari my.telegram.org: ").strip()
+api_id = int(os.environ["API_ID_VALUE"].strip())
+api_hash = os.environ["API_HASH_VALUE"].strip()
 
 with TelegramClient(StringSession(), api_id, api_hash) as client:
     session = client.session.save()
     print("\nSTRING_SESSION kamu:\n")
     print(session)
-    print("\nCopy string panjang di atas ke config.env pada bagian STRING_SESSION=." )
+    print("\nCopy string panjang di atas ke config.env pada bagian STRING_SESSION=.")
 PY
