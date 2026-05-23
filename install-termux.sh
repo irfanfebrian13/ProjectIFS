@@ -38,7 +38,17 @@ info "Upgrading pip/setuptools/wheel..."
 python -m pip install --upgrade pip setuptools wheel
 
 info "Installing Python requirements. This can take several minutes on first run..."
-python -m pip install --no-deps -r requirements.txt
+if python - <<'PY' >/dev/null 2>&1
+import platform
+raise SystemExit(0 if platform.system() == "Android" else 1)
+PY
+then
+  # On Termux/Android, install dependencies without recursively building native
+  # packages that are already provided by pkg (for example python-psutil).
+  python -m pip install --no-deps -r requirements.txt
+else
+  python -m pip install -r requirements.txt
+fi
 
 if [ ! -f config.env ]; then
   info "Creating config.env from sample_config.env..."
