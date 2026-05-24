@@ -540,6 +540,7 @@ class googleimagesdownload:
     # Download Page for more than 100 images
     def download_extended_page(self, url, chromedriver):
         from selenium import webdriver
+        from selenium.webdriver.common.by import By
         from selenium.webdriver.common.keys import Keys
         if sys.version_info[0] < 3:
             reload(sys)
@@ -592,14 +593,14 @@ class googleimagesdownload:
         time.sleep(1)
         print("Getting you a lot of images. This may take a few moments...")
 
-        element = browser.find_element_by_tag_name("body")
+        element = browser.find_element(By.TAG_NAME, "body")
         # Scroll down
         for i in range(30):
             element.send_keys(Keys.PAGE_DOWN)
             time.sleep(0.3)
 
         try:
-            browser.find_element_by_id("smb").click()
+            browser.find_element(By.ID, "smb").click()
             for i in range(50):
                 element.send_keys(Keys.PAGE_DOWN)
                 time.sleep(0.3)  # bot id protection

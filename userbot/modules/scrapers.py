@@ -60,6 +60,7 @@ from userbot import (
 from userbot.events import register
 from userbot.utils import chrome, googleimagesdownload, progress
 from youtube_search import YoutubeSearch
+from selenium.webdriver.common.by import By
 
 CARBONLANG = "auto"
 TTS_LANG = "id"
@@ -95,9 +96,9 @@ async def carbon_api(e):
     driver = await chrome()
     driver.get(url)
     await e.edit("`Processing...\n50%`")
-    driver.find_element_by_xpath("//button[@id='export-menu']").click()
-    driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
-    driver.find_element_by_xpath("//button[contains(text(),'PNG')]").click()
+    driver.find_element(By.XPATH, "//button[@id='export-menu']").click()
+    driver.find_element(By.XPATH, "//button[contains(text(),'4x')]").click()
+    driver.find_element(By.XPATH, "//button[contains(text(),'PNG')]").click()
     await e.edit("`Processing...\n75%`")
     # Waiting for downloading
     while not os.path.isfile(file_path):
