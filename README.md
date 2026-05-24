@@ -111,6 +111,18 @@ python string_session.py
 bash start-termux.sh
 ```
 
+`start-termux.sh` automatically runs update steps (`git pull` + `pip install -r requirements.txt`) before starting. If you only want to update without starting:
+
+```bash
+bash update-termux.sh
+```
+
+If the bot is already running and you want a clean restart:
+
+```bash
+bash start-termux.sh --restart
+```
+
 ```bash
 bash stop-termux.sh
 ```
