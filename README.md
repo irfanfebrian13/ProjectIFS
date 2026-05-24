@@ -93,10 +93,16 @@ API_HASH=
 STRING_SESSION=
 ```
 
-If you do not have `STRING_SESSION` yet:
+If you do not have `STRING_SESSION` yet, use the Termux wrapper. It calls the original ProjectIFS generator (`python string_session.py`) because that is the most reliable interactive method on Android:
 
 ```bash
 bash session-termux.sh
+```
+
+You can also run the original generator directly:
+
+```bash
+python string_session.py
 ```
 
 ### Start / stop
