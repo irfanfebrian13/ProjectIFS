@@ -27,6 +27,7 @@ pkg install -y \
   libxml2 \
   libxslt \
   openssl \
+  python-cryptography \
   libffi \
   libjpeg-turbo \
   zlib \
