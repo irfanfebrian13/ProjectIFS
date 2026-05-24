@@ -32,7 +32,6 @@ import os
 import shutil
 import time
 
-import deezloader
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from telethon.tl.types import DocumentAttributeAudio
@@ -63,6 +62,12 @@ async def _(event):
 
     if ARL_TOKEN is None:
         await event.edit(strings["invalid_arl_token"])
+        return
+
+    try:
+        import deezloader
+    except ImportError:
+        await event.edit("`deezloader package is not installed. This legacy command is unavailable in this Termux setup.`")
         return
 
     try:

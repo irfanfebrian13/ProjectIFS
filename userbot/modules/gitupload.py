@@ -4,7 +4,6 @@
 # you may not use this file except in compliance with the License.
 # Ported to UserBot by @Mayur_Karaniya
 
-from github import Github
 import os
 import time
 from datetime import datetime
@@ -56,6 +55,10 @@ async def download(event):
 async def git_commit(file_name, mone):
     content_list = []
     access_token = GITHUB_ACCESS_TOKEN
+    try:
+        from github import Github
+    except ImportError:
+        return await mone.edit("`PyGithub is not installed. This optional command is unavailable on this Termux setup.`")
     g = Github(access_token)
     file = open(file_name, "r", encoding='utf-8')
     commit_data = file.read()

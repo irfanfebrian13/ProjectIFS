@@ -24,22 +24,9 @@ except PhoneNumberInvalidError:
     print(INVALID_PH)
     exit(1)
 
-_default_disabled_modules = set()
-if os.environ.get("TERMUX_VERSION") or os.environ.get("PREFIX", "").endswith("com.termux/files/usr"):
-    # These legacy/credential-heavy modules either depend on broken/upstream-removed
-    # packages on Python 3.13/Android or require cloud credentials not present in
-    # a local Termux setup. Users can override with DISABLED_MODULES if needed.
-    _default_disabled_modules.update({
-        "covid", "deezload", "github", "gitupload", "heroku", "lyrics", "scrapers"
-    })
-
-_disabled_modules_raw = os.environ.get("DISABLED_MODULES")
-if not _disabled_modules_raw:
-    _disabled_modules_raw = ",".join(sorted(_default_disabled_modules))
-
 _disabled_modules = {
     module.strip()
-    for module in _disabled_modules_raw.split(",")
+    for module in os.environ.get("DISABLED_MODULES", "").split(",")
     if module.strip()
 }
 loaded_modules = []

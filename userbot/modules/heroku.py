@@ -20,11 +20,18 @@ from userbot.events import register
 
 heroku_api = "https://api.heroku.com"
 if HEROKU_APP_NAME is not None and HEROKU_API_KEY is not None:
-    Heroku = heroku3.from_key(HEROKU_API_KEY)
-    app = Heroku.app(HEROKU_APP_NAME)
-    heroku_var = app.config()
+    try:
+        Heroku = heroku3.from_key(HEROKU_API_KEY)
+        app = Heroku.app(HEROKU_APP_NAME)
+        heroku_var = app.config()
+    except Exception as exc:
+        app = None
+        heroku_var = None
+        HEROKU_INIT_ERROR = exc
 else:
     app = None
+    heroku_var = None
+    HEROKU_INIT_ERROR = None
 
 
 @register(outgoing=True,
@@ -32,7 +39,7 @@ else:
 async def variable(var):
     exe = var.pattern_match.group(1)
     if app is None:
-        await var.edit("`Please setup your`  **HEROKU_APP_NAME**.")
+        await var.edit("`Heroku module is not configured or credentials are invalid. Set valid HEROKU_APP_NAME and HEROKU_API_KEY to use this command.`")
         return False
     if exe == "get":
         await var.edit("`Getting information...`")

@@ -7,7 +7,6 @@
 import aiohttp
 import os
 import time
-from github import Github
 from datetime import datetime
 from userbot.events import register
 from userbot import CMD_HELP, GITHUB_ACCESS_TOKEN, GIT_REPO_NAME, bot
@@ -111,6 +110,10 @@ async def download(event):
 async def git_commit(file_name, mone):
     content_list = []
     access_token = GITHUB_ACCESS_TOKEN
+    try:
+        from github import Github
+    except ImportError:
+        return await mone.edit("`PyGithub is not installed. This optional command is unavailable on this Termux setup.`")
     g = Github(access_token)
     with open(file_name, "r", encoding='utf-8') as file:
         commit_data = file.read()

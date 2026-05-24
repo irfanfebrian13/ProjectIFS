@@ -12,16 +12,20 @@ from userbot.events import register
 from userbot import (CMD_HELP, GENIUS, lastfm, LASTFM_USERNAME)
 from pylast import User
 
+genius = None
+GENIUS_INIT_ERROR = None
 if GENIUS is not None:
-    genius = lyricsgenius.Genius(GENIUS)
+    try:
+        genius = lyricsgenius.Genius(GENIUS)
+    except Exception as exc:
+        GENIUS_INIT_ERROR = exc
 
 
 @register(outgoing=True, pattern="^.lyrics (?:(now)|(.*) - (.*))")
 async def lyrics(lyric):
     await lyric.edit("`Getting information...`")
-    if GENIUS is None:
-        await lyric.edit(
-            "`Provide genius access token to Heroku ConfigVars...`")
+    if GENIUS is None or genius is None:
+        await lyric.edit("`Provide a valid GENIUS_ACCESS_TOKEN in config.env to use lyrics.`")
         return False
     if lyric.pattern_match.group(1) == "now":
         playing = User(LASTFM_USERNAME, lastfm).get_now_playing()

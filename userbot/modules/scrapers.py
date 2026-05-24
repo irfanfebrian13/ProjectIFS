@@ -17,8 +17,18 @@ from urllib.parse import quote_plus
 
 import wikipedia
 from bs4 import BeautifulSoup
-from emoji import get_emoji_regexp
-from googletrans import LANGUAGES, Translator
+try:
+    from emoji import get_emoji_regexp
+except ImportError:
+    import emoji
+    def get_emoji_regexp():
+        return emoji.get_emoji_regexp() if hasattr(emoji, "get_emoji_regexp") else __import__("re").compile("[" + "".join(map(__import__("re").escape, getattr(emoji, "EMOJI_DATA", {}).keys())) + "]")
+
+try:
+    from googletrans import LANGUAGES, Translator
+except ImportError:
+    LANGUAGES = {"id": "indonesian", "en": "english"}
+    Translator = None
 from gtts import gTTS
 from gtts.lang import tts_langs
 from requests import get
@@ -433,6 +443,9 @@ async def imdb(e):
 @register(outgoing=True, pattern=r"^\.trt(?: |$)([\s\S]*)")
 async def translateme(trans):
     """ For .trt command, translate the given text using Google Translate. """
+    if Translator is None:
+        await translateme.edit("`Translator backend is unavailable on this Python/Termux setup.`")
+        return
     translator = Translator()
     textx = await trans.get_reply_message()
     message = trans.pattern_match.group(1)
