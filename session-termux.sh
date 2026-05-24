@@ -42,6 +42,7 @@ fi
 export API_ID_VALUE API_HASH_VALUE
 
 python - <<'PY'
+import getpass
 import os
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
@@ -49,7 +50,25 @@ from telethon.sessions import StringSession
 api_id = int(os.environ["API_ID_VALUE"].strip())
 api_hash = os.environ["API_HASH_VALUE"].strip()
 
+tty = open('/dev/tty', 'r+', encoding='utf-8')
+
+def ask(prompt):
+    tty.write(prompt)
+    tty.flush()
+    return tty.readline().strip()
+
+def ask_password(prompt):
+    # getpass reads from /dev/tty when available, so the password is not echoed.
+    return getpass.getpass(prompt)
+
+phone = ask('Nomor Telegram dengan kode negara, contoh +628xxxx: ')
+
 with TelegramClient(StringSession(), api_id, api_hash) as client:
+    client.start(
+        phone=phone,
+        code_callback=lambda: ask('Kode login Telegram: '),
+        password=lambda: ask_password('Password 2FA Telegram kalau ada: '),
+    )
     session = client.session.save()
     print("\nSTRING_SESSION kamu:\n")
     print(session)
